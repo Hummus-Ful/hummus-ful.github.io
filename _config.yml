@@ -7,40 +7,42 @@
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # --------------------------
-title: Chirpy                          # the main title
+title: Hummus-Ful Path to PenTest                          # the main title
 
-tagline: A text-focused Jekyll theme.  # it will display as the sub-title
+tagline: Learning something new every day	# it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  A minimal, portfolio, sidebar,
-  bootstrap Jekyll theme with responsive web design
-  and focuses on text presentation.
+  I'll fill thos description in the future.
+  This simple site is going to provide some walkthrough for TryHackMe and Vulnhub.
+  My plan is to also try HackTheBox machines.
 
 # fill in the base hostname & protocol for your site, e.g., 'https://username.github.io'
 url: 'https://hummus-ful.github.io'
 
-author: your_full_name                  # change to your full name
+author: Hummus_Ful                  # change to your full name
 
-avatar: /assets/img/sample/avatar.jpg   # support internet resources
+avatar: /assets/img/avatar/hf.jpg   # support internet resources
 
 github:
-  username: github_username             # change to your github username
+  username: Hummus-Ful             # change to your github username
 
 twitter:
-  username: twitter_username            # change to your twitter username
+  username: Hummus_Ful            # change to your twitter username
 
 social:
-  name: your_full_name                  # it will shows as the copyright owner in Footer
+  name: Hummus_Ful                  # it will shows as the copyright owner in Footer
   email: example@doamin.com             # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username      # change to your twitter homepage
-    - https://github.com/username       # change to your github homepage
+    - https://twitter.com/hummus_ful      # change to your twitter homepage
+    - https://github.com/hummus-ful       # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
 
-google_site_verification: google_meta_tag_verification # change to your verification string
+
+# BELOW GOOGLE ANAL LINE WAS COMMENTED OUT BY HF!
+# google_site_verification: google_meta_tag_verification # change to your verification string
 # --------------------------
 
 
@@ -49,7 +51,7 @@ google_site_verification: google_meta_tag_verification # change to your verifica
 baseurl: ''
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Asia/Shanghai
+timezone: Asia/Jerusalem
 
 google_analytics:
   id: ''          # Fill with your Google Analytics ID
@@ -79,7 +81,7 @@ disqus:
 #
 #     dark   - Use the dark color scheme
 #
-theme_mode:   # <light|dark>
+theme_mode:   dark
 
 # boolean type, the global switch for ToC in posts.
 toc: true
@@ -114,7 +116,7 @@ defaults:
       type: posts
     values:
       layout: post
-      comments: true    # Enable comments in posts.
+      comments: false	# Enable comments in posts. Default was true
       toc: true         # Display TOC column in posts.
       breadcrumb:
         -
