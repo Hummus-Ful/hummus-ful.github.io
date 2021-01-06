@@ -1,7 +1,7 @@
 # words per minute
-wpm: 180
+wpm: 200
 
 # minimum value
-min_time: 1
+min_time: 3
 
 prompt: min

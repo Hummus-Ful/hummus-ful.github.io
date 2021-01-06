@@ -50,13 +50,12 @@ layout: page
 
   <div class="post-preview">
     <h1>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}<img src="{{post.image}}" alt="" style="max-width:100%;"></a>
     </h1>
-
+     
     <div class="post-content">
       <p>
-        {% include no-linenos.html content=post.content %}
-        {{ content | markdownify | strip_html | truncate: 200 }}
+        {{ post.excerpt }}
       </p>
     </div>
 

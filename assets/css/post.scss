@@ -351,3 +351,17 @@ $prompt-newer: "{{ site.data.label.post.button.next }}";
     margin-right: -.5rem;
   }
 }
+
+h1 {
+   /* color: rgb(138, 180, 248); */
+  color: #8ab4f8;
+  /* color: #de6b18; */
+  border-bottom-color: #8ab4f8; /* #de6b18; */
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+h2 {
+   /* color: rgb(138, 180, 248); */
+  color: #de6b18;
+}
