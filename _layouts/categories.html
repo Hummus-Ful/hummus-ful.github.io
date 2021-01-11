@@ -64,6 +64,7 @@ layout: page
       </span>
 
       <!-- arrow -->
+      <!-- Commented out by HF
       {% if sub_categories_size > 0%}
       <a href="#{{ LIST_PREFIX }}{{ group_index }}" data-toggle="collapse"
         aria-expanded="true" aria-label="{{ HEAD_PREFIX }}{{ group_index }}-trigger"
@@ -75,10 +76,12 @@ layout: page
         <i class="fas fa-fw fa-angle-right"></i>
       </span>
       {% endif %}
+      Commented out by HF -->
 
     </div> <!-- .card-header -->
 
     <!-- Sub-categories -->
+    <!-- Commented out by HF
     {% if sub_categories_size > 0 %}
     <div id="{{ LIST_PREFIX }}{{ group_index }}" class="collapse show" aria-expanded="true">
       <ul class="list-group">
@@ -96,7 +99,7 @@ layout: page
       </ul>
     </div>
     {% endif %}
-
+    Commented out by HF -->
   </div> <!-- .card -->
 
     {% assign group_index = group_index | plus: 1 %}
