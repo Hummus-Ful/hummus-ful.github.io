@@ -59,8 +59,8 @@
         {%- elsif entry.type == 'email' -%}
           {% assign email = site.social.email | split: '@' %}
           javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@')
-        {%- elsif entry.type == 'rss' -%}
-          {{ "/feed.xml" | relative_url }}
+        {%- elsif entry.type == 'bmc' -%}
+          {{ "https://www.buymeacoffee.com/Hummus.Ful" }}
         {%- else -%}
           {{ entry.url }}
         {%- endif -%}

@@ -15,10 +15,10 @@
   icon: 'fas fa-envelope'
   noblank: true            # open link in current tab
 -
-# Uncomment in case rss is needed - was disabled by HF
-#   type: rss
-#   icon: 'fas fa-rss'
-#   noblank: true
+# Uncomment in case bmc is needed
+  type: bmc
+  icon: 'fas fa-hand-holding-heart'
+  noblank: true
 
 # Uncomment and complete the url below to enable more contact options
 # -
