@@ -54,17 +54,13 @@ layout: page
         <!-- content count -->
         {% assign top_posts_size = site.categories[category_name] | size %}
         <span class="text-muted small font-weight-light">
-          {% if sub_categories_size > 0 %}
-            {{ sub_categories_size }}
-            {% if sub_categories_size > 1 %}categories{% else %}category{% endif %},
-          {% endif %}
-            {{ top_posts_size }}
-            post{% if top_posts_size > 1 %}s{% endif %}
+          {{ top_posts_size }}
+          post{% if top_posts_size > 1 %}s{% endif %}
         </span>
       </span>
 
       <!-- arrow -->
-      <!-- Commented out by HF
+
       {% if sub_categories_size > 0%}
       <a href="#{{ LIST_PREFIX }}{{ group_index }}" data-toggle="collapse"
         aria-expanded="true" aria-label="{{ HEAD_PREFIX }}{{ group_index }}-trigger"
@@ -76,30 +72,26 @@ layout: page
         <i class="fas fa-fw fa-angle-right"></i>
       </span>
       {% endif %}
-      Commented out by HF -->
+
 
     </div> <!-- .card-header -->
 
     <!-- Sub-categories -->
-    <!-- Commented out by HF
+
     {% if sub_categories_size > 0 %}
     <div id="{{ LIST_PREFIX }}{{ group_index }}" class="collapse show" aria-expanded="true">
       <ul class="list-group">
-        {% for sub_category in sub_categories %}
+        {% for post in posts_of_category %}
         <li class="list-group-item">
           <i class="far fa-folder fa-fw"></i>
-          <a href="{{ site.baseurl }}/categories/{{ sub_category | slugify | url_encode }}/"
-            class="ml-1 mr-2">{{ sub_category }}</a>
-          {% assign posts_size = site.categories[sub_category] | size %}
-          <span class="text-muted small font-weight-light">{{ posts_size }}
-            post{% if posts_size > 1 %}s{% endif %}
-          </span>
+          <a href="{{ site.baseurl }}{{ post.url }}"
+            class="ml-1 mr-2">{{ post.title }}</a>
         </li>
         {% endfor %}
       </ul>
     </div>
     {% endif %}
-    Commented out by HF -->
+
   </div> <!-- .card -->
 
     {% assign group_index = group_index | plus: 1 %}
