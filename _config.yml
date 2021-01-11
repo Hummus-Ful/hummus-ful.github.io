@@ -7,14 +7,13 @@
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # --------------------------
-title: Hummus-Ful Path to PenTest                          # the main title
+title: Hacking Walkthroughs, Writeups and Guides                          # the main title
 
-tagline: Learning something new every day	# it will display as the sub-title
+tagline: Learn Something New Every Day	# it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  I'll fill thos description in the future.
-  This simple site is going to provide some walkthrough for TryHackMe and Vulnhub.
-  My plan is to also try HackTheBox machines.
+  Strengthen your hacking skills - writeups & walkthroughs for various hacking challenges and capture the Flag exercises from TryHackMe, VulnHub and HackTheBox.
+  Network and Web Applications Security, Ethical Hacking.
 
 # fill in the base hostname & protocol for your site, e.g., 'https://username.github.io'
 url: 'https://hummus-ful.github.io'
