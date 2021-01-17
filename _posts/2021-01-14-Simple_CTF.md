@@ -222,7 +222,7 @@ $ root@Machine:/root# cat root.txt
 ```
 
 
-# Potential Rabbit holes
+# Potential Rabbit Holes
 ## robots.txt
 The website's *robots.txt* file contains the following:
 ```
@@ -267,11 +267,11 @@ Same for the */openemr-5_0_1_3* path, which was not available when I tested. Was
 I also tried to Brute-Force *mike*s password on SSH service using Hydra.
 `hydra -l system -P /usr/share/wordlists/rockyou.txt ssh://10.10.157.7:2222 -t 4`
 
-## Insuffucient scanning
+## Insuffucient Scanning
 Nikto wasn't able to find the Simple CMS and sent me to a goos chase all confused.
 
 
 # Summary
-## Reading materials
+## Reading Materials
 * [How to spawn a TTY Shell](https://netsec.ws/?p=337)
 * *sudo -l* - I see this technice used in many CTFs, It's simple to run and easy to understnad. Make sure you feel comfortable with it. [READ](https://www.explainshell.com/explain?cmd=sudo+-l), [READ2](https://medium.com/better-programming/becoming-root-through-misconfigured-sudo-7b68e731d1f5)
