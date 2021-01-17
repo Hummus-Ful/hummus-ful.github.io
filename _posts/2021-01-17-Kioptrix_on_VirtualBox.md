@@ -14,6 +14,8 @@ published: true
 Kioptrix virtual machine (by Vulnhub) was designed to run using VMware. In this How-To we'll learn how it can be run on VirtualBox instead.
 <!--exc-->
 
+## Video
+If you prefer to follow a video instead, please see my video tutorial [here](https://youtu.be/-3GeOXwfSyU). 
 
 ## Download
 Download [the virtual machine](https://www.vulnhub.com/entry/kioptrix-level-1-1,22/) (VM) from [Vulnhub](https://www.vulnhub.com/).
