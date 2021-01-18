@@ -2,7 +2,7 @@
 title: Pickle Rick  
 categories: [Try-Hack-Me, Easy] # Up to two elements only
 tags: [tryhackme, easy, pickle rick, ctf]     # TAG names should always be lowercase, infinate number of elements
-image: /assets/img/posts/Pickle_rick/Pickle_rick.jpg    # If you want to add an image to the top of the post contents
+image: /assets/img/posts/Pickle_rick/Pickle_rick.webp    # If you want to add an image to the top of the post contents
 # toc: false    # table of content - overwrite global configuration from _config.yml
 # comments: flase       # overwrite global configuration from _config.yml
 # pin: true     # pin one or more posts to the top of the home page
@@ -42,12 +42,12 @@ $ cd ~/tryhackme/pickle_rick/
 ## Website
 Using Firefox we can check the website on port 80. It is a Rick and Morty theme where the index page has one photo and text stating we need to look for three ingredients
 
-![try-hack-me pickle rick homepage](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-homepage.png)
+![try-hack-me pickle rick homepage](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-homepage.webp)
 _Pickle Rick homepage_
 
 Nothing intresting to see here. Let's view the page source (right click on the page -> View Page Source). Here we find a username
 
-![try-hack-me-pickle-rick-comment-view-page-source](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-comment-view-page-source.png)
+![try-hack-me-pickle-rick-comment-view-page-source](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-comment-view-page-source.webp)
 _Pickle Rick comment in page source_
 
 There are no unusual HTTP headers.
@@ -84,7 +84,7 @@ Two interesting paths:
 # Gaining Access
 We can try to use the username we found in the page source and combine it with the string from the robots file.
 
-![try-hack-me-pickle-rick-login-page](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-login-page.png)
+![try-hack-me-pickle-rick-login-page](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-login-page.webp)
 _Pickle Rick login page_
 Success! we have access to the portal.
 
@@ -118,7 +118,7 @@ If you try to access the rest of the files in that directory you'll find a file 
 * `-iname "*ingred*"` file name to loog for. We also use wildcards (`*`) as the filename might start/end with additional string.
 * `&2>/dev/null` this will produce a cleaner output as it will discard errors, such as permission 
 
-![try-hack-me-pickle-rick-find-search-results](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-find-search-results.png)
+![try-hack-me-pickle-rick-find-search-results](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-find-search-results.webp)
 _Pickle Rick find command results_
 We know the first file, but the second one is new. 
 

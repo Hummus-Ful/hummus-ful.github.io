@@ -2,7 +2,7 @@
 title: Simple CTF
 categories: [Try-Hack-Me, Easy] # Up to two elements only
 tags: [tryhackme, easy, simple ctf, ctf, sqli, ftp, dirb]     # TAG names should always be lowercase, infinate number of elements
-image: /assets/img/posts/Simple_ctf/Simple_ctf.jpg    # If you want to add an image to the top of the post contents
+image: /assets/img/posts/Simple_ctf/Simple_ctf.webp    # If you want to add an image to the top of the post contents
 # toc: false    # table of content - overwrite global configuration from _config.yml
 # comments: flase       # overwrite global configuration from _config.yml
 # pin: true     # pin one or more posts to the top of the home page
