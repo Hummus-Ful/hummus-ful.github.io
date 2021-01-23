@@ -1,6 +1,6 @@
 ---
 title: Simple CTF
-categories: [Try-Hack-Me, Easy] # Up to two elements only
+categories: [Try-Hack-Me] # Up to two elements only
 tags: [tryhackme, easy, simple ctf, ctf, sqli, ftp, dirb]     # TAG names should always be lowercase, infinate number of elements
 image: /assets/img/posts/Simple_ctf/Simple_ctf.webp    # If you want to add an image to the top of the post contents
 # toc: false    # table of content - overwrite global configuration from _config.yml
@@ -30,25 +30,13 @@ from [https://www.parrotsec.org/download/](https://www.parrotsec.org/download/)
 ## TryHackMe account
 Signup or login to [TryHackMe](https://tryhackme.com/) and deploy the machine.
 
-## A dedicated directory to store our findings
+## Dedicated Directory
 We need to create a dedicated directory in our home directory `~` for our findings. We'll use `mkdir`  and `cd` (change directory) into it:
+
 ```console
 $ mkdir ~/tryhackme/simple_ctf
 $ cd ~/tryhackme/simple_ctf/
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # Scanning
@@ -75,7 +63,8 @@ Nmap done: 1 IP address (1 host up) scanned in 193.13 seconds
 ```
 
 ## ftp
-Personally, if a scan finds a listening FTP service, I ALWAYS try to login using *anonymous* user with empty paswword. Let's do that
+Personally, if a scan finds a listening FTP service, I ALWAYS try to login using *anonymous* user with empty paswword. Let's do that.
+
 ```console
 $ ftp 10.10.157.7
 Name (10.10.64.49:kali): anonymous
@@ -83,7 +72,9 @@ Name (10.10.64.49:kali): anonymous
 Remote system type is UNIX.
 Using binary mode to transfer files.
 ```
+
 Nice! If we use `ls -la` command to list all files in the directory we find an intresting file - `ForMitch.txt`. using `get ForMitch.txt` we can pull that file to our local machine and read it:
+
 ```
 Dammit man... you'te the worst dev i've seen. You set the same pass for the system user, and the password is so weak... i cracked it in seconds. Gosh... what a mess!
 ```
@@ -148,6 +139,7 @@ Options:
                         Wordlist for crack admin password
   -c, --crack           Crack password with wordlist
 ```
+
 OK, so our flags are:
 * `--url http://10.10.157.7/simple`
 * `--crack`
@@ -171,6 +163,7 @@ The script will run on a dictionary of charectes, trying to find the right one i
 # Gaining Access
 ## SSH
 Now that we have `username:password` commbination we can try to use and login to SSH (remember the FTP note? it stated the combination is the same):
+
 ```
 $ ssh mitch@10.10.157.7 -p2222                                                                                                                     130 ⨯
 The authenticity of host '[10.10.157.7]:2222 ([10.10.157.7]:2222)' can't be established.
@@ -198,7 +191,9 @@ Using `ls /home` we can list users in the system. This will reveal there's anoth
 
 # Privilege Escalation
 Using `sudo -l` command we can test our user permissions to run services / files with sudo privileges 
-> links to further reading about `sudo -l` can be found at the Summary
+
+Note:
+: Links to further reading about `sudo -l` can be found at the Summary
 
 ```
 $ sudo -l          
@@ -209,7 +204,9 @@ User mitch may run the following commands on Machine:
 We can use that service to try and spawn a shell with sudo privileges. We first need to lunch the service as `sudo` and try to exit it back to shell. 
 `sudo /usr/bin/[REDUCTED]`
 Now, once we're in that app we can exit back to shell using `:shell` input, but now as *root*.
-> links to further reading how to spawn a TTY Shell can be found at the Summary
+
+Note:
+: Links to further reading how to spawn a TTY Shell can be found at the Summary
 
 ```
 $ root@Machine:~# whoami
@@ -225,6 +222,7 @@ $ root@Machine:/root# cat root.txt
 # Potential Rabbit Holes
 ## robots.txt
 The website's *robots.txt* file contains the following:
+
 ```
 #
 # "$Id: robots.txt 3494 2003-03-19 15:37:44Z mike $"

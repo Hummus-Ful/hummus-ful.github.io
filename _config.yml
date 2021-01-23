@@ -88,10 +88,11 @@ toc: true
 paginate: 10
 
 kramdown:
+  hard_wrap: true  # HF: https://jekyllrb.com/docs/configuration/markdown/
   syntax_highlighter: rouge
   syntax_highlighter_opts:   # Rouge Options › https://github.com/jneen/rouge#full-options
     css_class: highlight
-    # default_lang: console
+    default_lang: console  # HF: this was commented out
     span:
       line_numbers: false
     block:

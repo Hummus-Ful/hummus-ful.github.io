@@ -1,6 +1,6 @@
 ---
 title: Pickle Rick  
-categories: [Try-Hack-Me, Easy] # Up to two elements only
+categories: [Try-Hack-Me] # Up to two elements only
 tags: [tryhackme, easy, pickle rick, ctf]     # TAG names should always be lowercase, infinate number of elements
 image: /assets/img/posts/Pickle_rick/Pickle_rick.webp    # If you want to add an image to the top of the post contents
 # toc: false    # table of content - overwrite global configuration from _config.yml
@@ -30,8 +30,9 @@ from [https://www.parrotsec.org/download/](https://www.parrotsec.org/download/)
 ## TryHackMe account
 Signup or login to [TryHackMe](https://tryhackme.com/) and deploy the machine.
 
-## A dedicated directory to store our findings
+## Dedicated Directory
 We need to create a dedicated directory in our home directory `~` for our findings. We'll use `mkdir`  and `cd` (change directory) into it:
+
 ```console
 $ mkdir ~/tryhackme/pickle_rick
 $ cd ~/tryhackme/pickle_rick/
@@ -42,18 +43,17 @@ $ cd ~/tryhackme/pickle_rick/
 ## Website
 Using Firefox we can check the website on port 80. It is a Rick and Morty theme where the index page has one photo and text stating we need to look for three ingredients
 
-![try-hack-me pickle rick homepage](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-homepage.webp)
-_Pickle Rick homepage_
+![try-hack-me pickle rick homepage](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-homepage.webp) _Pickle Rick homepage_
 
 Nothing intresting to see here. Let's view the page source (right click on the page -> View Page Source). Here we find a username
 
-![try-hack-me-pickle-rick-comment-view-page-source](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-comment-view-page-source.webp)
-_Pickle Rick comment in page source_
+![try-hack-me-pickle-rick-comment-view-page-source](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-comment-view-page-source.webp) _Pickle Rick comment in page source_
 
 There are no unusual HTTP headers.
 
 ## nikto
 start nikto scan:
+
 ```console
 $ nikto -h http://10.10.128.137/
 - Nikto v2.1.6
@@ -81,17 +81,19 @@ Two interesting paths:
 * **robots.txt** - in this case the file contains only one string, nothing else. Might be useful in the future.
 * **/login.php** - the Portal login page. 
 
+
 # Gaining Access
 We can try to use the username we found in the page source and combine it with the string from the robots file.
 
-![try-hack-me-pickle-rick-login-page](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-login-page.webp)
-_Pickle Rick login page_
+![try-hack-me-pickle-rick-login-page](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-login-page.webp) _Pickle Rick login page_
+
 Success! we have access to the portal.
 
 ## Command Panel
 The portal main page is a Command Panel which allow us to run Unix commands on the backend (server).
 Let's try simple command - `whoami` which returns `www-data`, the user running the web service.
 If we issue a `ls` command we get a list of files where the first one looks like the one we're after
+
 ```console
 [REDUCTED] 
 assets
@@ -102,6 +104,7 @@ login.php
 portal.php
 robots.txt
 ```
+
 As you recall, `robots.txt` is accessible directly using a browser. Therefore we can assume the directory itself and all of the files should be accessible. We'll try `http://10.10.70.251/REDUCTED`
 
 Success! The file content is the first ingredient we need.
@@ -118,13 +121,15 @@ If you try to access the rest of the files in that directory you'll find a file 
 * `-iname "*ingred*"` file name to loog for. We also use wildcards (`*`) as the filename might start/end with additional string.
 * `&2>/dev/null` this will produce a cleaner output as it will discard errors, such as permission 
 
-![try-hack-me-pickle-rick-find-search-results](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-find-search-results.webp)
-_Pickle Rick find command results_
+![try-hack-me-pickle-rick-find-search-results](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-find-search-results.webp) _Pickle Rick find command results_
+
 We know the first file, but the second one is new. 
 
 ## cat / head / tail / less
 The `cat`, `head` and `tail` commands are disabled. `less`, on the other hand is enabled and we're able to print the file content using `less /home/rick/"REDUCTED"`
-**NOTE:** The filname includes a space, therefore we must use quotes on the filename.
+
+Note:
+: The filname includes a space, therefore we must use quotes on the filename.
 
 Success! we have the second ingredient.
 - [x] First Flag
@@ -133,9 +138,12 @@ Success! we have the second ingredient.
 
 
 # Privilege Escalation
->links to further reading about `sudo -l` can be found at the Summary
+
+Note:
+: Links to further reading about `sudo -l` can be found at the Summary
 
 We can use the `sudo -l` command to list which commands we can run as `sudo`:
+
 ```console
 Matching Defaults entries for www-data on ip-10-10-230-106.eu-west-1.compute.internal:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
