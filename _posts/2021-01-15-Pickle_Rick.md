@@ -21,7 +21,7 @@ In this post, we'll try to root [Pickle Rick](https://tryhackme.com/room/pickler
 
 # Prerequisites
 ## Kali Linux / Parrot Security OS 
-The virtual machine we'll use to source the attack vectors. These Linux disrebutions has all required tools pre-installed. Choose one of them.
+The virtual machine we'll use to source the attack vectors against the Pickle-Rick machine. These Linux distribution has all required tools pre-installed. Choose one of them.
 * Kali Linux VM (based on Debian distribution) can be downloaded for both VMware and VirtualBox 
 from [Offensive-Security](https://www.offensive-security.com/kali-linux-vm-vmware-virtualbox-image-download/)
 * Parrot Security VM (based on Arch distribution with different desktop flavors) can be downloaded 
@@ -37,6 +37,20 @@ We need to create a dedicated directory in our home directory `~` for our findin
 $ mkdir ~/tryhackme/pickle_rick
 $ cd ~/tryhackme/pickle_rick/
 ```
+
+## Add IP to hosts file [OPTIONAL]
+For better readability and as I don't want to try and remember the target'd IP, I'll add the machine's IP to my local `/etc/hosts` file:
+
+```console
+$ sudo nano /etc/hosts
+
+127.0.0.1       localhost
+127.0.1.1       kali
+10.10.128.137   pickle.rick
+...
+```
+
+Now we can use the '**pickle.rick**' hostname instead of the IP in all the commands.
 
 
 # Scanning
@@ -55,11 +69,11 @@ There are no unusual HTTP headers.
 start nikto scan:
 
 ```console
-$ nikto -h http://10.10.128.137/
+$ nikto -h http://pickle.rick/
 - Nikto v2.1.6
 ---------------------------------------------------------------------------
 + Target IP:          10.10.128.137
-+ Target Hostname:    10.10.128.137
++ Target Hostname:    pickle.rick
 + Target Port:        80
 + Start Time:         2021-01-07 18:19:04 (GMT-5)
 ---------------------------------------------------------------------------
@@ -105,7 +119,7 @@ portal.php
 robots.txt
 ```
 
-As you recall, `robots.txt` is accessible directly using a browser. Therefore we can assume the directory itself and all of the files should be accessible. We'll try `http://10.10.70.251/REDUCTED`
+As you recall, `robots.txt` is accessible directly using a browser. Therefore we can assume the directory itself and all of the files should be accessible. We'll try `http://pickle.rick/REDUCTED`
 
 Success! The file content is the first ingredient we need.
 

