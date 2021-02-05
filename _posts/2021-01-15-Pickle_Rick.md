@@ -1,10 +1,10 @@
 ---
 title: Pickle Rick  
 categories: [Try-Hack-Me] # Up to two elements only
-tags: [tryhackme, easy, pickle rick, ctf]     # TAG names should always be lowercase, infinate number of elements
+tags: [tryhackme, easy, pickle rick, ctf]     # TAG names should always be lowercase, infinite number of elements
 image: /assets/img/posts/Pickle_rick/Pickle_rick.webp    # If you want to add an image to the top of the post contents
 # toc: false    # table of content - overwrite global configuration from _config.yml
-# comments: flase       # overwrite global configuration from _config.yml
+# comments: false       # overwrite global configuration from _config.yml
 # pin: true     # pin one or more posts to the top of the home page
 excerpt_separator: <!--exc-->
 permalink: /:categories/:year/:month/:day/:title:output_ext
@@ -22,16 +22,14 @@ In this post, we'll try to root [Pickle Rick](https://tryhackme.com/room/pickler
 # Prerequisites
 ## Kali Linux / Parrot Security OS 
 The virtual machine we'll use to source the attack vectors against the Pickle-Rick machine. These Linux distribution has all required tools pre-installed. Choose one of them.
-* Kali Linux VM (based on Debian distribution) can be downloaded for both VMware and VirtualBox 
-from [Offensive-Security](https://www.offensive-security.com/kali-linux-vm-vmware-virtualbox-image-download/)
-* Parrot Security VM (based on Arch distribution with different desktop flavors) can be downloaded 
-from [https://www.parrotsec.org/download/](https://www.parrotsec.org/download/)
+* Kali Linux VM (based on Debian distribution) can be downloaded for both VMware and VirtualBox from [Offensive-Security](https://www.offensive-security.com/kali-linux-vm-vmware-virtualbox-image-download/)
+* Parrot Security VM (based on Arch distribution with different desktop flavors) can be downloaded from [Parrot Security](https://www.parrotsec.org/download/)
 
 ## TryHackMe account
-Signup or login to [TryHackMe](https://tryhackme.com/) and deploy the machine.
+Signup or login to [TryHackMe](https://tryhackme.com/), deploy the [machine](https://tryhackme.com/room/picklerick) and give it a couple of minutes to boot.
 
 ## Dedicated Directory
-We need to create a dedicated directory in our home directory `~` for our findings. We'll use `mkdir`  and `cd` (change directory) into it:
+We need to create a dedicated directory in our home directory `~` for our findings. We'll use `mkdir` to create the directory and `cd` to change into it:
 
 ```console
 $ mkdir ~/tryhackme/pickle_rick
@@ -39,7 +37,8 @@ $ cd ~/tryhackme/pickle_rick/
 ```
 
 ## Add IP to hosts file [OPTIONAL]
-For better readability and as I don't want to try and remember the target'd IP, I'll add the machine's IP to my local `/etc/hosts` file:
+For better readability we'll add the target IP to our local `/etc/hosts` file.
+Please note this command requires sudo privileges. 
 
 ```console
 $ sudo nano /etc/hosts
@@ -59,14 +58,14 @@ Using Firefox we can check the website on port 80. It is a Rick and Morty theme 
 
 ![try-hack-me pickle rick homepage](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-homepage.webp) _Pickle Rick homepage_
 
-Nothing intresting to see here. Let's view the page source (right click on the page -> View Page Source). Here we find a username
+Nothing interesting to see here. Let's view the page source (right click on the page -> View Page Source). Here we find a **username**
 
 ![try-hack-me-pickle-rick-comment-view-page-source](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-comment-view-page-source.webp) _Pickle Rick comment in page source_
 
-There are no unusual HTTP headers.
+Using the browser Developer Tools were not able to find any unusual HTTP headers.
 
 ## nikto
-start nikto scan:
+We'll use nikto to scan/enumerate the web application for known paths:
 
 ```console
 $ nikto -h http://pickle.rick/
@@ -93,23 +92,22 @@ $ nikto -h http://pickle.rick/
 
 Two interesting paths:
 * **robots.txt** - in this case the file contains only one string, nothing else. Might be useful in the future.
-* **/login.php** - the Portal login page. 
+* **/login.php** - this is the Portal login page. 
 
 
 # Gaining Access
-We can try to use the username we found in the page source and combine it with the string from the robots file.
+We can try and use the username we found in the page source and use the string from the robots file as the password.
 
 ![try-hack-me-pickle-rick-login-page](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-login-page.webp) _Pickle Rick login page_
 
-Success! we have access to the portal.
+**Success!** we now have access to the portal.
 
-## Command Panel
-The portal main page is a Command Panel which allow us to run Unix commands on the backend (server).
-Let's try simple command - `whoami` which returns `www-data`, the user running the web service.
-If we issue a `ls` command we get a list of files where the first one looks like the one we're after
+## First flag - Command Panel
+The portal main page is a Command Panel which allow us to run Unix commands on the target (backend server).
+Let's do a quick test and run `whoami` command and inspect the output. The output is `www-data` which is the user running the web service. If we issue a `ls` command we get a list of files:
 
 ```console
-[REDUCTED] 
+[REDACTED] 
 assets
 clue.txt
 denied.php
@@ -118,32 +116,30 @@ login.php
 portal.php
 robots.txt
 ```
-
-As you recall, `robots.txt` is accessible directly using a browser. Therefore we can assume the directory itself and all of the files should be accessible. We'll try `http://pickle.rick/REDUCTED`
-
-Success! The file content is the first ingredient we need.
+According it's name, the first file might contain valuable information for us.
+As you recall, `robots.txt` file is accessible directly using a browser. Therefore we can assume the directory itself can be accessed by the web server. I leads us to try and access the above file using the browser path - `http://pickle.rick/REDACTED` - **Success!** the file content is the first ingredient we need.
 
 - [x] First Flag
 - [ ] Second Flag
 - [ ] Third Flag
 
-## find
-If you try to access the rest of the files in that directory you'll find a file stating **"Look around the file system for the other ingredient."**. To do so we can use the `find` command to look for other files related to the ingredients. 
-**Keep in mind** - The search is limited by user permissions, yet we should give it a try. The command is `find / -iname "*ingred*" -type f &2>/dev/null` 
+## Second flag - find
+We should check the rest of the files in that directory. One of them is stating **"Look around the file system for the other ingredient."**. To do so we can use the `find` command. it will allow us to run a quick search for files/directories of interest (related to the ingredients).
+**Keep in mind** - The search is limited by user permissions. The command we'll use is - `find / -iname "*ingred*" -type f 2>/dev/null` which breaks down to:
 * `/` is the root path to start the scan from
 * `-type f` search for file (d for directory)
-* `-iname "*ingred*"` file name to loog for. We also use wildcards (`*`) as the filename might start/end with additional string.
-* `&2>/dev/null` this will produce a cleaner output as it will discard errors, such as permission 
+* `-iname "*ingred*"` file name to look for. We also use wildcards (`*`) as the filename might start/end with additional string.
+* `2>/dev/null` this will produce a cleaner output as it will discard errors, such as permission 
 
 ![try-hack-me-pickle-rick-find-search-results](/assets/img/posts/Pickle_rick/try-hack-me-pickle-rick-find-search-results.webp) _Pickle Rick find command results_
 
-We know the first file, but the second one is new. 
+We know the first file, but the second one is new.
 
 ## cat / head / tail / less
-The `cat`, `head` and `tail` commands are disabled. `less`, on the other hand is enabled and we're able to print the file content using `less /home/rick/"REDUCTED"`
+The `cat`, `head` and `tail` commands are disabled. `less`, on the other hand is enabled and we're able to print the file content using `less /home/rick/"REDACTED"`
 
 Note:
-: The filname includes a space, therefore we must use quotes on the filename.
+: The filename includes a space, therefore we **must use quotes** on the filename.
 
 Success! we have the second ingredient.
 - [x] First Flag
@@ -152,11 +148,11 @@ Success! we have the second ingredient.
 
 
 # Privilege Escalation
+## Third flag
+We can use the `sudo -l` command to list which commands we can run as `sudo`:
 
 Note:
-: Links to further reading about `sudo -l` can be found at the Summary
-
-We can use the `sudo -l` command to list which commands we can run as `sudo`:
+: Links to further reading about `sudo -l` can be found at the Summary section below.
 
 ```console
 Matching Defaults entries for www-data on ip-10-10-230-106.eu-west-1.compute.internal:
@@ -166,15 +162,15 @@ User www-data may run the following commands on ip-10-10-230-106.eu-west-1.compu
     (ALL) NOPASSWD: ALL
 ```
 
-Amazing! we can run all (any) commands as sudo. Nice. let's investigate the root folder using `sudo ls /root`
+According to the output above, we can run "ALL" (**any**) commands as sudo. Nice. Let's investigate the root folder using `sudo ls /root`
 
 ```console
-[REDUCTED]
+[REDACTED]
 snap
 ```
 
-OK, Let's pring the first file using `less`: 
-`sudo less /root/RDUCTED`
+OK, Let's print the first file using `less`: 
+`sudo less /root/REDACTED`
 
 Now we have the third ingredient.
 
@@ -184,8 +180,8 @@ Now we have the third ingredient.
 
 
 # Potential Rabbit Holes
-## Steganography
-Nikto found the /assets directory which contains multiple images. My first instinct (and maybe yours as well) is to look for hiden data in these files. Not in this case. 
+## Stenography
+Nikto found the /assets directory which contains multiple images. First instinct is to look for hidden data in these files. Not in this case.
 
 
 # Summary
@@ -193,4 +189,4 @@ Nikto found the /assets directory which contains multiple images. My first insti
 * If one Unix command is being blocked or disabled, try to find another command to use e.g. `cat` and `less`.
 
 ## Reading Materials
-* *sudo -l* - I see this technice used in many CTFs, It's simple to run and easy to understnad. Make sure you feel comfortable with it. [READ](https://www.explainshell.com/explain?cmd=sudo+-l), [READ2](https://medium.com/better-programming/becoming-root-through-misconfigured-sudo-7b68e731d1f5)
+* *sudo -l* - I see this technique used in many CTFs, It's simple to run and easy to understand. Make sure you feel comfortable with it. [READ](https://www.explainshell.com/explain?cmd=sudo+-l), [READ2](https://medium.com/better-programming/becoming-root-through-misconfigured-sudo-7b68e731d1f5)
