@@ -6,36 +6,23 @@ order: 4
 
 
 ## About the Author
-I go by the handle *Hummus-Ful* which is one of my favorite dishes. It is a Vegan friendly stew of 
-cooked fava beans on top of cooked, mashed chickpeas blended with tahini.
+Hello! I’m known as *Hummus-Ful*, inspired by one of my favorite dishes—a vegan-friendly stew made with cooked fava beans and creamy tahini blended with mashed chickpeas.
 
-I practice Information Security and Network related topic on a daily basis, yet I feel it is mostly theoretical. As a result I wanted to improve my "hands-on" experience. 
+I work in Information Security and focus on network-related topics daily. However, I often find that my work leans more towards the theoretical side. To bridge this gap, I sought to gain more hands-on experience.
 
-Intentionally vulnerable machines hosted by [Vulnhub](https://www.vulnhub.com/) 
-and services such [Try-Hack-Me](https://tryhackme.com/) and [Hack-the-Box](https://www.hackthebox.eu/) provide just that - a controled environment you can hack freely (well... almost).
-
-
-
+I’ve turned to intentionally vulnerable machines hosted by platforms like [Vulnhub](https://www.vulnhub.com/) , [TryHackMe](https://tryhackme.com/), and [Hack The Box](https://www.hackthebox.eu/). These services offer a controlled environment where I can practice hacking skills freely (well… almost!).
 
 ## About the Blog
-* The Information Security community is very supportive and newcommers are always welcome. I remember my first years in the industry, where I I learned a lot from information shared by respectful community members. free of charge.
-I would like this blog to provide exatly that - provide accessible, easy to understand, entry-level (and above) FREE knowledge. 
-I try to make each post informative as possible, breaking commands some might see as arbitrary into small, understandable pices. 
-In case additional reading is needed, links to external resources are provided.
-The information found in this blog is mostly my notes from hacking my way on TryHackMe, HackTheBox and Vulnhub.
+The Information Security community is incredibly supportive, and newcomers are always welcome. I remember my early years in the industry, where I learned a great deal from the generous sharing of knowledge by experienced community members—often at no cost. I aim for this blog to embody that spirit by providing accessible, easy-to-understand, entry-level (and beyond) knowledge for free.
+Each post is crafted to be as informative as possible, breaking down complex commands into manageable pieces. When additional reading is necessary, I include links to external resources. The content here primarily consists of my notes from my experiences on TryHackMe, Hack The Box, and VulnHub.
 
-* That being said, I want to emphasize - **ALL INFORMATION IN THIS BLOG IS FOR EDUCATIONAL PURPESES ONLY. 
-HACKING IS ILLIGAL UNLESS YOU HAVE EXPLICIT CONCENT FROM THE TARGET OWNER. STAY SAFE, STAY OUT OF JAIL! AND USE THE ABOVE PLATFORMS**
+That said, I want to emphasize that **ALL INFORMATION IN THIS BLOG IS FOR EDUCATIONAL PURPOSES ONLY. HACKING IS ILLEGAL UNLESS YOU HAVE EXPLICIT CONSENT FROM THE TARGET OWNER. STAY SAFE, STAY OUT OF JAIL, AND USE THE PLATFORMS MENTIONED ABOVE.**
 
-* Keep learning - You'll surlly need to use other information sources to keep learning. Please let me know if you want me to add any kind of materials to make it easy for others to learn.
+**Keep Learning** - Continuous learning is essential in this field. You’ll likely need to explore various resources to expand your knowledge. If you have suggestions for materials that could help others learn, please let me know!
 
-* No tracking/analytics were added to this blog but I believe Github (hosting this blog) still enable some analytics. 
-
-* Help spread the word - If you find the information in this blog intresting or if you learned anything please make your friends familiar with this blog and share it on social media
-
-**Keep in mind:**
-* I'm still a NOOB and I keep learning myself. These are my notes and some might have different ways of "doing things".
-* Im not native English speaker. You'll probebly find some grammer mistakes which I'll be happy to fix if you notify me :)
+## Privacy Notice
+I value your privacy; no tracking or analytics have been added to this blog. However, please note that GitHub, which hosts this blog, may still enable some analytics.
 
 ## Contact Me
-Questions? Suggestions? feel free to follow or contact me on Twitter [@Hummus_Ful](https://twitter.com/hummus_ful)
+Have questions or suggestions? Feel free to reach out or follow me on Mastodon!
+
